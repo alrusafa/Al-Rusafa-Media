@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>برنامج اضافة الشعار - اعلام فرع الرصافة</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-blue: #0056b3;
+      --secondary-blue: #003d82;
+      --accent-color: #00a8ff;
+      --text-color: #333;
+      --white: #fff;
+      --border-radius: 12px;
+      --error-color: #ff4757;
+      --success-color: #2ed573;
+      --warning-color: #ffa502;
+      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+body {
+  font-family: 'Tajawal', 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* تم التعديل هنا */
+  color: var(--text-color);
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-color), var(--primary-blue));
+      z-index: 1000;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    .login-container, .ls-container {
+      background: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      animation: fadeInUp 0.8s ease-out;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .login-container {
+      padding: 40px 30px;
+      z-index: 10;
+    }
+
+    .ls-container {
+      padding: 0 30px 30px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    .ls-container.active {
+      height: auto;
+      opacity: 1;
+      overflow: visible;
+      padding-top: 10px; /* التعديل هنا */
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      margin-bottom: 30px;
+      text-align: center;
+      position: relative;
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+
+    .custom-logo {
+      width: 180px;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
+      transition: transform 0.3s ease;
+    }
+
+    .custom-logo:hover {
+      transform: scale(1.05);
+    }
+
+    .page-title {
+      color: var(--primary-blue);
+      margin: 15px 0 10px;
+      font-size: 32px;
+      font-weight: 800;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .page-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 25%;
+      right: 25%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-color), var(--primary-blue));
+      border-radius: 2px;
+    }
+
+    .subtitle {
+      color: #555;
+      font-size: 18px;
+      margin-bottom: 30px;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: right;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #444;
+      font-size: 16px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 45px 14px 20px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: var(--transition);
+      background: #fff;
+      color: var(--text-color);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 4px rgba(0, 168, 255, 0.15);
+    }
+
+    .password-toggle {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #777;
+      z-index: 10;
+      font-size: 18px;
+    }
+
+    .password-toggle:hover {
+      color: var(--accent-color);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 86, 179, 0.15);
+      letter-spacing: 0.5px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 86, 179, 0.25);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 14px;
+      margin-top: 8px;
+      display: none;
+      font-weight: 600;
+    }
+
+    .spinner {
+      display: none;
+      width: 40px;
+      height: 40px;
+      margin: 20px auto;
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-left-color: var(--accent-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* برنامج اضافة الشعار */
+    .ls-title {
+      color: var(--primary-blue);
+      text-align: center;
+      margin: 0; /* التعديل هنا */
+      padding-top: 0; /* التعديل هنا */
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .ls-subtitle {
+      color: var(--accent-color);
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      margin: 5px 0 15px; /* التعديل هنا */
+    }
+
+    .ls-instructions {
+      background: rgba(0, 168, 255, 0.08);
+      padding: 15px 20px;
+      border-radius: var(--border-radius);
+      margin: 0 0 15px; /* التعديل هنا */
+      text-align: right;
+      border-left: 4px solid var(--accent-color);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+    }
+
+    .ls-step {
+      margin-bottom: 10px;
+      color: #444;
+      font-size: 16px;
+      padding-right: 10px;
+      position: relative;
+      line-height: 1.6;
+    }
+
+    .ls-step::before {
+      content: '';
+      position: absolute;
+      right: -10px;
+      top: 8px;
+      width: 6px;
+      height: 6px;
+      background: var(--accent-color);
+      border-radius: 50%;
+    }
+
+    .ls-file-inputs {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+      gap: 15px;
+    }
+
+    .ls-file-input-container {
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+    }
+
+    .ls-btn {
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 5px;
+      transition: var(--transition);
+      width: 100%;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 3px 8px rgba(0, 86, 179, 0.1);
+    }
+
+    .ls-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
+    }
+
+    .ls-btn-danger {
+      background: linear-gradient(135deg, #ff4757, #e84118);
+    }
+
+    .ls-btn-success {
+      background: linear-gradient(135deg, var(--success-color), #1e8449);
+    }
+
+    .ls-btn:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .ls-logo-preview, .ls-canvas {
+      max-width: 100%;
+      max-height: 350px;
+      margin: 15px auto;
+      display: block;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .ls-thumbnails {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 15px 0;
+      min-height: 120px;
+    }
+
+    .ls-thumbnail {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #718096;
+      font-size: 14px;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .ls-thumbnail:hover {
+      border-color: var(--accent-color);
+      transform: scale(1.03);
+    }
+
+    .ls-thumbnail.active {
+      border-color: var(--success-color);
+      box-shadow: 0 0 8px rgba(46, 213, 115, 0.15);
+      transform: scale(1.03);
+    }
+
+    .ls-controls {
+      margin: 15px 0;
+    }
+
+    .ls-slider-container {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+      margin-bottom: 15px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .slider-with-value {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .slider-with-value input[type="range"] {
+      flex: 1;
+    }
+
+    .slider-value {
+      background: var(--accent-color);
+      color: white;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+      min-width: 50px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .ls-slider {
+      width: 100%;
+      margin: 12px 0;
+      height: 6px;
+      -webkit-appearance: none;
+      background: #e9ecef;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .ls-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(0, 168, 255, 0.2);
+    }
+
+    .ls-position-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    .ls-slider-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ls-slider-group label {
+      min-width: 70px;
+      font-weight: 600;
+      color: #444;
+      font-size: 15px;
+    }
+
+    .ls-position-slider {
+      flex-grow: 1;
+      height: 6px;
+      -webkit-appearance: none;
+      background: #e9ecef;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    .ls-position-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0, 168, 255, 0.2);
+    }
+
+    .ls-batch-progress {
+      margin: 15px 0;
+      display: none;
+      text-align: center;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .ls-progress-bar {
+      width: 100%;
+      background-color: #e9ecef;
+      border-radius: 6px;
+      margin: 12px 0;
+      height: 12px;
+      overflow: hidden;
+    }
+
+    .ls-progress {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-color), var(--primary-blue));
+      border-radius: 6px;
+      width: 0%;
+      transition: width 0.3s;
+      position: relative;
+    }
+
+    .ls-progress::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.5), 
+        transparent);
+      animation: progressAnimation 1.5s infinite linear;
+    }
+
+    @keyframes progressAnimation {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .btn-group .ls-btn {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+      
+      .login-container {
+        padding: 30px 20px;
+      }
+      
+      .page-title {
+        font-size: 26px;
+      }
+      
+      .custom-logo {
+        width: 140px;
+      }
+      
+      .ls-title {
+        font-size: 24px;
+      }
+      
+      .ls-subtitle {
+        font-size: 16px;
+      }
+      
+      .ls-file-inputs {
+        flex-direction: column;
+      }
+      
+      .btn-group .ls-btn {
+        min-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .login-container {
+        padding: 25px 15px;
+      }
+      
+      .page-title {
+        font-size: 24px;
+      }
+      
+      .subtitle {
+        font-size: 16px;
+      }
+      
+      .custom-logo {
+        width: 120px;
+      }
+      
+      .ls-btn {
+        padding: 10px;
+        font-size: 14px;
+      }
+      
+      .ls-title {
+        font-size: 22px;
+      }
+      
+      .ls-subtitle {
+        font-size: 15px;
+      }
+      
+      .ls-thumbnail {
+        width: 100px;
+        height: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- واجهة تسجيل الدخول -->
+    <div id="loginContainer" class="login-container">
+      <div class="header">
+        <div class="logo">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgOQKcOujR3M9GdGSF_Vf4zo4JZ27NaniO-lB4lL9Eb7FWAkuizcFTQ7IrovJ6-MtHHhgE3QcpicE_c0o7FNn5LBPEEgK27TBgdRJamUhyphenhyphenmn2WQt4tkZxICudzp2L_yrt6wEogVLLb4Xzo/s1600/80755801_2654045651298178_3882047473715249152_n.jpg" 
+               alt="شعار توزيع كهرباء الرصافة" 
+               class="custom-logo">
+        </div>
+        <h1 class="page-title">برنامج اضافة الشعار</h1>
+        <p class="subtitle">اعلام فرع توزيع كهرباء الرصافة</p>
+      </div>
+      
+      <div class="form-group">
+        <label for="username"><i class="fas fa-user"></i> اسم المستخدم</label>
+        <input type="text" id="username" class="form-control" placeholder="أدخل اسم المستخدم">
+        <div id="usernameError" class="error-message">يجب إدخال اسم المستخدم</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
+        <div style="position: relative;">
+          <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور">
+          <i id="togglePassword" class="password-toggle fas fa-eye"></i>
+        </div>
+        <div id="passwordError" class="error-message">يجب إدخال كلمة المرور</div>
+      </div>
+      
+      <button id="submitLogin" class="login-btn">
+        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
+      </button>
+      <div class="spinner" id="loginSpinner"></div>
+    </div>
+    
+    <!-- برنامج اضافة الشعار (مخفي في البداية) -->
+    <div id="logoSystemContainer" class="ls-container">
+      <h1 class="ls-title">برنامج إضافة الشعار على الصور</h1>
+      <h2 class="ls-subtitle">اعلام فرع توزيع كهرباء الرصافة</h2>
+      
+      <div class="ls-instructions">
+        <div class="ls-step">1. اختر الشعار (PNG شفاف)</div>
+        <div class="ls-step">2. اختر مجموعة الصور (حتى 15 صورة)</div>
+        <div class="ls-step">3. اضبط موقع وحجم الشعار على الصورة الأولى</div>
+        <div class="ls-step">4. اضغط "تطبيق على الكل" لمعالجة جميع الصور</div>
+        <div class="ls-step">5. احفظ الصور فرديًا أو أعد تعيين النظام</div>
+      </div>
+
+      <div class="ls-file-inputs">
+        <div class="ls-file-input-container">
+          <button id="lsUploadLogoBtn" class="ls-btn">
+            <i class="fas fa-upload"></i> تحميل الشعار
+          </button>
+          <input type="file" id="lsLogoInput" accept="image/png" style="display:none;">
+          <img id="lsLogoPreview" class="ls-logo-preview" alt="معاينة الشعار" style="display:none;">
+        </div>
+        
+        <div class="ls-file-input-container">
+          <button id="lsUploadImagesBtn" class="ls-btn">
+            <i class="fas fa-images"></i> تحميل مجموعة الصور
+          </button>
+          <input type="file" id="lsImagesInput" accept="image/*" multiple style="display:none;">
+          <div class="ls-thumbnails" id="lsThumbnails"></div>
+        </div>
+      </div>
+
+      <canvas id="lsCanvas" class="ls-canvas" style="display:none;"></canvas>
+
+      <div class="ls-controls" id="lsControls" style="display:none;">
+        <div class="ls-slider-container">
+          <div class="slider-with-value">
+            <input type="range" id="lsScaleSlider" class="ls-slider" min="0.1" max="1.0" step="0.01" value="0.25">
+            <span id="scaleValue" class="slider-value">25%</span>
+          </div>
+          <div style="margin: 8px; text-align: center;">
+            <small>استخدم الشريط لتكبير/تصغير الشعار</small>
+          </div>
+        </div>
+        
+        <div class="ls-position-controls">
+          <div class="ls-slider-group">
+            <label for="lsXPosition"><i class="fas fa-arrows-alt-h"></i> الموقع الأفقي:</label>
+            <input type="range" id="lsXPosition" class="ls-position-slider" min="0" max="100" step="1" value="50">
+          </div>
+          
+          <div class="ls-slider-group">
+            <label for="lsYPosition"><i class="fas fa-arrows-alt-v"></i> الموقع الرأسي:</label>
+            <input type="range" id="lsYPosition" class="ls-position-slider" min="0" max="100" step="1" value="50">
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin: 12px 0; color: #555;">
+          <small>استخدم الأشرطة لتحريك الشعار أفقياً وعمودياً</small><br>
+          <small>أو اسحب الشعار مباشرة على الصورة</small>
+        </div>
+      </div>
+
+      <div class="ls-batch-progress" id="lsBatchProgress">
+        <h3>جاري معالجة الصور...</h3>
+        <div class="ls-progress-bar">
+          <div class="ls-progress" id="lsProgressBar"></div>
+        </div>
+        <p id="lsProgressText">0/0</p>
+      </div>
+
+      <div class="btn-group">
+        <button id="lsAddLogoBtn" class="ls-btn" disabled>
+          <i class="fas fa-plus-circle"></i> إضافة الشعار
+        </button>
+        <button id="lsApplyToAllBtn" class="ls-btn ls-btn-success" disabled>
+          <i class="fas fa-cogs"></i> تطبيق على الكل
+        </button>
+        <button id="lsDownloadBtn" class="ls-btn" style="display:none;">
+          <i class="fas fa-download"></i> تحميل الصورة
+        </button>
+        <button id="lsResetBtn" class="ls-btn ls-btn-danger">
+          <i class="fas fa-redo"></i> إعادة تعيين
+        </button>
+        <button id="lsLogoutBtn" class="ls-btn">
+          <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // عناصر تسجيل الدخول
+      const loginContainer = document.getElementById('loginContainer');
+      const submitLogin = document.getElementById('submitLogin');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const usernameError = document.getElementById('usernameError');
+      const passwordError = document.getElementById('passwordError');
+      const loginSpinner = document.getElementById('loginSpinner');
+      const logoSystemContainer = document.getElementById('logoSystemContainer');
+      const lsLogoutBtn = document.getElementById('lsLogoutBtn');
+      const togglePassword = document.getElementById('togglePassword');
+
+      // وظيفة إظهار/إخفاء كلمة المرور
+      togglePassword.addEventListener('click', function() {
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          this.classList.remove('fa-eye');
+          this.classList.add('fa-eye-slash');
+        } else {
+          passwordInput.type = 'password';
+          this.classList.remove('fa-eye-slash');
+          this.classList.add('fa-eye');
+        }
+      });
+
+      // التحقق من بيانات الدخول
+      submitLogin.addEventListener('click', function() {
+        let isValid = true;
+        
+        if (usernameInput.value.trim() === '') {
+          usernameError.style.display = 'block';
+          isValid = false;
+        } else {
+          usernameError.style.display = 'none';
+        }
+        
+        if (passwordInput.value.trim() === '') {
+          passwordError.style.display = 'block';
+          isValid = false;
+        } else {
+          passwordError.style.display = 'none';
+        }
+        
+        if (isValid) {
+          loginSpinner.style.display = 'block';
+          
+          // Simulate login process
+          setTimeout(() => {
+            // بيانات الدخول: media و 123
+            const validCredentials = {
+              username: 'media',
+              password: '202cb962ac59075b964b07152d234b70' // MD5 hash for '123'
+            };
+            
+            const enteredUsername = usernameInput.value.trim();
+            const enteredPassword = CryptoJS.MD5(passwordInput.value.trim()).toString();
+            
+            if (enteredUsername === validCredentials.username && 
+                enteredPassword === validCredentials.password) {
+              
+              // إخفاء واجهة تسجيل الدخول
+              loginContainer.style.display = 'none';
+              
+              // إظهار برنامج اضافة الشعار
+              logoSystemContainer.classList.add('active');
+              
+            } else {
+              usernameError.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
+              usernameError.style.display = 'block';
+              passwordError.style.display = 'none';
+            }
+            
+            loginSpinner.style.display = 'none';
+          }, 1500);
+        }
+      });
+
+      // زر تسجيل الخروج
+      lsLogoutBtn.addEventListener('click', function() {
+        // إظهار واجهة تسجيل الدخول
+        loginContainer.style.display = 'block';
+        
+        // إخفاء برنامج اضافة الشعار
+        logoSystemContainer.classList.remove('active');
+        
+        // Reset form
+        usernameInput.value = '';
+        passwordInput.value = '';
+        usernameError.style.display = 'none';
+        passwordError.style.display = 'none';
+        
+        // إعادة تعيين نظام الشعارات
+        lsResetSystem();
+      });
+
+      // Logo System Elements
+      const lsUploadLogoBtn = document.getElementById('lsUploadLogoBtn');
+      const lsLogoInput = document.getElementById('lsLogoInput');
+      const lsLogoPreview = document.getElementById('lsLogoPreview');
+      const lsUploadImagesBtn = document.getElementById('lsUploadImagesBtn');
+      const lsImagesInput = document.getElementById('lsImagesInput');
+      const lsThumbnailsContainer = document.getElementById('lsThumbnails');
+      const lsCanvas = document.getElementById('lsCanvas');
+      const lsCtx = lsCanvas.getContext('2d');
+      const lsAddLogoBtn = document.getElementById('lsAddLogoBtn');
+      const lsApplyToAllBtn = document.getElementById('lsApplyToAllBtn');
+      const lsDownloadBtn = document.getElementById('lsDownloadBtn');
+      const lsResetBtn = document.getElementById('lsResetBtn');
+      const lsScaleSlider = document.getElementById('lsScaleSlider');
+      const scaleValue = document.getElementById('scaleValue');
+      const lsXPositionSlider = document.getElementById('lsXPosition');
+      const lsYPositionSlider = document.getElementById('lsYPosition');
+      const lsControls = document.getElementById('lsControls');
+      const lsBatchProgress = document.getElementById('lsBatchProgress');
+      const lsProgressBar = document.getElementById('lsProgressBar');
+      const lsProgressText = document.getElementById('lsProgressText');
+      
+      // متغيرات النظام
+      let lsLogoImage = new Image();
+      let lsCurrentImages = [];
+      let lsCurrentIndex = 0;
+      let lsLogoX = 0, lsLogoY = 0, lsLogoScale = 0.25;
+      let lsIsDragging = false;
+      let lsDragStartX = 0, lsDragStartY = 0;
+      let lsLogoWidth = 0, lsLogoHeight = 0;
+
+      // تحديث قيمة شريط التكبير/التصغير
+      function updateScaleValue() {
+        const value = Math.round(parseFloat(lsScaleSlider.value) * 100);
+        scaleValue.textContent = value + '%';
+      }
+
+      // أحداث النظام
+      lsUploadLogoBtn.addEventListener('click', () => lsLogoInput.click());
+      lsUploadImagesBtn.addEventListener('click', () => lsImagesInput.click());
+      
+      // تحديث قيمة شريط التكبير عند التغيير
+      lsScaleSlider.addEventListener('input', function() {
+        updateScaleValue();
+        lsLogoScale = parseFloat(this.value);
+        lsDrawCanvas();
+        
+        const xPercent = (lsLogoX / (lsCanvas.width - lsLogoWidth)) * 100;
+        const yPercent = (lsLogoY / (lsCanvas.height - lsLogoHeight)) * 100;
+        lsXPositionSlider.value = xPercent;
+        lsYPositionSlider.value = yPercent;
+      });
+
+      lsLogoInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          lsLogoImage.onload = () => {
+            lsLogoPreview.src = e.target.result;
+            lsLogoPreview.style.display = 'block';
+            lsCheckReadyState();
+          }
+          lsLogoImage.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      });
+
+      lsImagesInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files).slice(0, 15);
+        if (files.length === 0) return;
+        
+        lsCurrentImages = [];
+        lsThumbnailsContainer.innerHTML = '';
+        
+        files.forEach((file, index) => {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+              lsCurrentImages.push({
+                file: file,
+                url: e.target.result,
+                img: img
+              });
+              
+              const thumb = document.createElement('img');
+              thumb.src = e.target.result;
+              thumb.className = 'ls-thumbnail';
+              thumb.dataset.index = index;
+              thumb.addEventListener('click', () => lsShowImage(index));
+              lsThumbnailsContainer.appendChild(thumb);
+              
+              if (index === 0) lsShowImage(0);
+              lsCheckReadyState();
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      function lsShowImage(index) {
+        if (index < 0 || index >= lsCurrentImages.length) return;
+        
+        lsCurrentIndex = index;
+        document.querySelectorAll('.ls-thumbnail').forEach((thumb, i) => {
+          thumb.classList.toggle('active', i === index);
+        });
+        
+        lsDrawCanvas();
+      }
+
+      function lsCheckReadyState() {
+        lsAddLogoBtn.disabled = !(lsLogoImage.src && lsCurrentImages.length > 0);
+        lsApplyToAllBtn.disabled = !(lsLogoImage.src && lsCurrentImages.length > 0);
+      }
+
+      function lsCalculateLogoDimensions() {
+        lsLogoWidth = lsCanvas.width * lsLogoScale;
+        lsLogoHeight = lsLogoImage.height * (lsLogoWidth / lsLogoImage.width);
+      }
+
+      function lsIsCursorOnLogo(x, y) {
+        return x >= lsLogoX && x <= lsLogoX + lsLogoWidth && 
+               y >= lsLogoY && y <= lsLogoY + lsLogoHeight;
+      }
+
+      lsAddLogoBtn.addEventListener('click', () => {
+        if (lsCurrentImages.length === 0) return;
+        
+        const img = lsCurrentImages[lsCurrentIndex].img;
+        let width = img.width;
+        let height = img.height;
+        const maxSize = 1200;
+        
+        if (width > maxSize || height > maxSize) {
+          const ratio = Math.min(maxSize / width, maxSize / height);
+          width = Math.floor(width * ratio);
+          height = Math.floor(height * ratio);
+        }
+        
+        lsCanvas.width = width;
+        lsCanvas.height = height;
+
+        lsCalculateLogoDimensions();
+        lsLogoX = (width - lsLogoWidth) / 2;
+        lsLogoY = (height - lsLogoHeight) / 2;
+
+        lsXPositionSlider.value = 50;
+        lsYPositionSlider.value = 50;
+
+        lsDrawCanvas();
+
+        lsCanvas.style.display = 'block';
+        lsControls.style.display = 'block';
+        lsDownloadBtn.style.display = 'inline-block';
+        updateScaleValue(); // تحديث قيمة شريط التكبير عند الإضافة
+      });
+
+      function lsDrawCanvas() {
+        if (lsCurrentImages.length === 0) return;
+        
+        const img = lsCurrentImages[lsCurrentIndex].img;
+        lsCtx.clearRect(0, 0, lsCanvas.width, lsCanvas.height);
+        
+        lsCtx.drawImage(img, 0, 0, lsCanvas.width, lsCanvas.height);
+        
+        if (lsLogoImage.src) {
+          lsCalculateLogoDimensions();
+          lsCtx.imageSmoothingEnabled = true;
+          lsCtx.imageSmoothingQuality = 'high';
+          lsCtx.drawImage(lsLogoImage, lsLogoX, lsLogoY, lsLogoWidth, lsLogoHeight);
+        }
+      }
+
+      lsXPositionSlider.addEventListener('input', function() {
+        const width = lsCanvas.width;
+        lsLogoX = (parseInt(this.value) / 100) * (width - lsLogoWidth);
+        lsDrawCanvas();
+      });
+
+      lsYPositionSlider.addEventListener('input', function() {
+        const height = lsCanvas.height;
+        lsLogoY = (parseInt(this.value) / 100) * (height - lsLogoHeight);
+        lsDrawCanvas();
+      });
+
+      lsCanvas.addEventListener('mousedown', (e) => {
+        const rect = lsCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        if (lsIsCursorOnLogo(x, y)) {
+          lsIsDragging = true;
+          lsDragStartX = x - lsLogoX;
+          lsDragStartY = y - lsLogoY;
+          lsCanvas.style.cursor = 'grabbing';
+        }
+      });
+
+      lsCanvas.addEventListener('mousemove', (e) => {
+        const rect = lsCanvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        if (lsIsDragging) {
+          lsLogoX = x - lsDragStartX;
+          lsLogoY = y - lsDragStartY;
+          
+          lsLogoX = Math.max(0, Math.min(lsCanvas.width - lsLogoWidth, lsLogoX));
+          lsLogoY = Math.max(0, Math.min(lsCanvas.height - lsLogoHeight, lsLogoY));
+          
+          const xPercent = (lsLogoX / (lsCanvas.width - lsLogoWidth)) * 100;
+          const yPercent = (lsLogoY / (lsCanvas.height - lsLogoHeight)) * 100;
+          lsXPositionSlider.value = xPercent;
+          lsYPositionSlider.value = yPercent;
+          
+          lsDrawCanvas();
+        } else if (lsIsCursorOnLogo(x, y)) {
+          lsCanvas.style.cursor = 'grab';
+        } else {
+          lsCanvas.style.cursor = 'default';
+        }
+      });
+
+      lsCanvas.addEventListener('mouseup', () => {
+        lsIsDragging = false;
+        lsCanvas.style.cursor = 'default';
+      });
+
+      lsCanvas.addEventListener('mouseleave', () => {
+        lsIsDragging = false;
+        lsCanvas.style.cursor = 'default';
+      });
+
+      lsDownloadBtn.addEventListener('click', () => {
+        if (lsCurrentImages.length === 0) return;
+        
+        const link = document.createElement('a');
+        link.download = `صورة_مع_شعار_${lsCurrentIndex + 1}.png`;
+        link.href = lsCanvas.toDataURL('image/png');
+        link.click();
+      });
+
+      lsApplyToAllBtn.addEventListener('click', async () => {
+        if (lsCurrentImages.length === 0 || !lsLogoImage.src) return;
+        
+        lsBatchProgress.style.display = 'block';
+        lsProgressBar.style.width = '0%';
+        lsProgressText.textContent = `0/${lsCurrentImages.length}`;
+        
+        const savedX = lsLogoX;
+        const savedY = lsLogoY;
+        const savedScale = lsLogoScale;
+        const savedCanvasWidth = lsCanvas.width;
+        const savedCanvasHeight = lsCanvas.height;
+        
+        // دالة لتنزيل الصور مع تأخير
+        const downloadImagesSequentially = async () => {
+          for (let i = 0; i < lsCurrentImages.length; i++) {
+            const img = lsCurrentImages[i].img;
+            
+            let width = img.width;
+            let height = img.height;
+            const maxSize = 1200;
+            
+            if (width > maxSize || height > maxSize) {
+              const ratio = Math.min(maxSize / width, maxSize / height);
+              width = Math.floor(width * ratio);
+              height = Math.floor(height * ratio);
+            }
+            
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            tempCtx.drawImage(img, 0, 0, width, height);
+            
+            const currentLogoWidth = width * savedScale;
+            const currentLogoHeight = lsLogoImage.height * (currentLogoWidth / lsLogoImage.width);
+            
+            const relativeX = (savedX / savedCanvasWidth) * width;
+            const relativeY = (savedY / savedCanvasHeight) * height;
+            
+            tempCtx.imageSmoothingEnabled = true;
+            tempCtx.imageSmoothingQuality = 'high';
+            tempCtx.drawImage(lsLogoImage, relativeX, relativeY, currentLogoWidth, currentLogoHeight);
+            
+            // إنشاء رابط التنزيل
+            const link = document.createElement('a');
+            link.download = `صورة_مع_شعار_${i + 1}.png`;
+            link.href = tempCanvas.toDataURL('image/png');
+            
+            // إضافة الرابط إلى DOM مؤقتًا
+            document.body.appendChild(link);
+            link.click();
+            
+            // تأخير قبل إزالة الرابط والمتابعة إلى الصورة التالية
+            await new Promise(resolve => {
+              setTimeout(() => {
+                document.body.removeChild(link);
+                resolve();
+              }, 300); // تأخير كافٍ لتنزيل كل صورة
+            });
+            
+            lsProgressBar.style.width = `${((i + 1) / lsCurrentImages.length) * 100}%`;
+            lsProgressText.textContent = `${i + 1}/${lsCurrentImages.length}`;
+          }
+        };
+        
+        await downloadImagesSequentially();
+        lsBatchProgress.style.display = 'none';
+      });
+
+      function lsResetSystem() {
+        // إعادة تعيين جميع المتغيرات
+        lsLogoImage = new Image();
+        lsCurrentImages = [];
+        lsCurrentIndex = 0;
+        lsLogoX = 0;
+        lsLogoY = 0;
+        lsLogoScale = 0.25;
+        
+        // إعادة تعيين واجهة المستخدم
+        lsLogoPreview.src = '';
+        lsLogoPreview.style.display = 'none';
+        lsThumbnailsContainer.innerHTML = '';
+        lsCanvas.style.display = 'none';
+        lsControls.style.display = 'none';
+        lsDownloadBtn.style.display = 'none';
+        lsBatchProgress.style.display = 'none';
+        
+        // إعادة تعيين عناصر التحكم
+        lsScaleSlider.value = 0.25;
+        lsXPositionSlider.value = 50;
+        lsYPositionSlider.value = 50;
+        
+        // تحديث قيمة شريط التكبير
+        updateScaleValue();
+        
+        // إعادة تعيين حالة الأزرار
+        lsAddLogoBtn.disabled = true;
+        lsApplyToAllBtn.disabled = true;
+        
+        // إعادة تعيين حقول الرفع
+        lsLogoInput.value = '';
+        lsImagesInput.value = '';
+      }
+
+      lsResetBtn.addEventListener('click', lsResetSystem);
+    });
+  </script>
+</body>
+</html>
