@@ -1,1206 +1,744 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>برنامج اضافة الشعار - اعلام فرع الرصافة</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --primary-blue: #0056b3;
-      --secondary-blue: #003d82;
-      --accent-color: #00a8ff;
-      --text-color: #333;
-      --white: #fff;
-      --border-radius: 12px;
-      --error-color: #ff4757;
-      --success-color: #2ed573;
-      --warning-color: #ffa502;
-      --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-      --transition: all 0.3s ease;
-    }
-    
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    
-body {
-  font-family: 'Tajawal', 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background: #fff;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start; /* تم التعديل هنا */
-  color: var(--text-color);
-  line-height: 1.6;
-  overflow-x: hidden;
-  position: relative;
-}
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent-color), var(--primary-blue));
-      z-index: 1000;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 900px;
-      margin: 20px auto;
-      padding: 20px;
-      position: relative;
-    }
-
-    .login-container, .ls-container {
-      background: var(--white);
-      border-radius: var(--border-radius);
-      box-shadow: var(--card-shadow);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      animation: fadeInUp 0.8s ease-out;
-      overflow: hidden;
-      position: relative;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-    }
-
-    .login-container {
-      padding: 40px 30px;
-      z-index: 10;
-    }
-
-    .ls-container {
-      padding: 0 30px 30px;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 0;
-      opacity: 0;
-      overflow: hidden;
-    }
-
-    .ls-container.active {
-      height: auto;
-      opacity: 1;
-      overflow: visible;
-      padding-top: 10px; /* التعديل هنا */
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .header {
-      margin-bottom: 30px;
-      text-align: center;
-      position: relative;
-    }
-
-    .logo {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 15px;
-    }
-
-    .custom-logo {
-      width: 180px;
-      height: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.1));
-      transition: transform 0.3s ease;
-    }
-
-    .custom-logo:hover {
-      transform: scale(1.05);
-    }
-
-    .page-title {
-      color: var(--primary-blue);
-      margin: 15px 0 10px;
-      font-size: 32px;
-      font-weight: 800;
-      position: relative;
-      padding-bottom: 10px;
-    }
-
-    .page-title::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 25%;
-      right: 25%;
-      height: 3px;
-      background: linear-gradient(90deg, var(--accent-color), var(--primary-blue));
-      border-radius: 2px;
-    }
-
-    .subtitle {
-      color: #555;
-      font-size: 18px;
-      margin-bottom: 30px;
-      line-height: 1.7;
-      font-weight: 600;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-      text-align: right;
-      position: relative;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: #444;
-      font-size: 16px;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 14px 45px 14px 20px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: var(--transition);
-      background: #fff;
-      color: var(--text-color);
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 4px rgba(0, 168, 255, 0.15);
-    }
-
-    .password-toggle {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #777;
-      z-index: 10;
-      font-size: 18px;
-    }
-
-    .password-toggle:hover {
-      color: var(--accent-color);
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 3px 10px rgba(0, 86, 179, 0.15);
-      letter-spacing: 0.5px;
-    }
-
-    .login-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0, 86, 179, 0.25);
-    }
-
-    .login-btn:active {
-      transform: translateY(0);
-    }
-
-    .error-message {
-      color: var(--error-color);
-      font-size: 14px;
-      margin-top: 8px;
-      display: none;
-      font-weight: 600;
-    }
-
-    .spinner {
-      display: none;
-      width: 40px;
-      height: 40px;
-      margin: 20px auto;
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-left-color: var(--accent-color);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* برنامج اضافة الشعار */
-    .ls-title {
-      color: var(--primary-blue);
-      text-align: center;
-      margin: 0; /* التعديل هنا */
-      padding-top: 0; /* التعديل هنا */
-      font-size: 28px;
-      font-weight: 800;
-    }
-
-    .ls-subtitle {
-      color: var(--accent-color);
-      text-align: center;
-      font-size: 18px;
-      font-weight: 700;
-      margin: 5px 0 15px; /* التعديل هنا */
-    }
-
-    .ls-instructions {
-      background: rgba(0, 168, 255, 0.08);
-      padding: 15px 20px;
-      border-radius: var(--border-radius);
-      margin: 0 0 15px; /* التعديل هنا */
-      text-align: right;
-      border-left: 4px solid var(--accent-color);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-    }
-
-    .ls-step {
-      margin-bottom: 10px;
-      color: #444;
-      font-size: 16px;
-      padding-right: 10px;
-      position: relative;
-      line-height: 1.6;
-    }
-
-    .ls-step::before {
-      content: '';
-      position: absolute;
-      right: -10px;
-      top: 8px;
-      width: 6px;
-      height: 6px;
-      background: var(--accent-color);
-      border-radius: 50%;
-    }
-
-    .ls-file-inputs {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-bottom: 15px;
-      gap: 15px;
-    }
-
-    .ls-file-input-container {
-      flex: 1;
-      min-width: 200px;
-      text-align: center;
-    }
-
-    .ls-btn {
-      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      font-size: 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 5px;
-      transition: var(--transition);
-      width: 100%;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 3px 8px rgba(0, 86, 179, 0.1);
-    }
-
-    .ls-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
-    }
-
-    .ls-btn-danger {
-      background: linear-gradient(135deg, #ff4757, #e84118);
-    }
-
-    .ls-btn-success {
-      background: linear-gradient(135deg, var(--success-color), #1e8449);
-    }
-
-    .ls-btn:disabled {
-      background: #95a5a6;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .ls-logo-preview, .ls-canvas {
-      max-width: 100%;
-      max-height: 350px;
-      margin: 15px auto;
-      display: block;
-      border-radius: 8px;
-      box-shadow: var(--card-shadow);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .ls-thumbnails {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-      margin: 15px 0;
-      min-height: 120px;
-    }
-
-    .ls-thumbnail {
-      width: 110px;
-      height: 110px;
-      object-fit: cover;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-      background: #f8f9fa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #718096;
-      font-size: 14px;
-      text-align: center;
-      padding: 8px;
-    }
-
-    .ls-thumbnail:hover {
-      border-color: var(--accent-color);
-      transform: scale(1.03);
-    }
-
-    .ls-thumbnail.active {
-      border-color: var(--success-color);
-      box-shadow: 0 0 8px rgba(46, 213, 115, 0.15);
-      transform: scale(1.03);
-    }
-
-    .ls-controls {
-      margin: 15px 0;
-    }
-
-    .ls-slider-container {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: var(--border-radius);
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
-      margin-bottom: 15px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .slider-with-value {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .slider-with-value input[type="range"] {
-      flex: 1;
-    }
-
-    .slider-value {
-      background: var(--accent-color);
-      color: white;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-weight: bold;
-      min-width: 50px;
-      text-align: center;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    }
-
-    .ls-slider {
-      width: 100%;
-      margin: 12px 0;
-      height: 6px;
-      -webkit-appearance: none;
-      background: #e9ecef;
-      border-radius: 3px;
-      outline: none;
-    }
-
-    .ls-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--accent-color);
-      cursor: pointer;
-      box-shadow: 0 0 6px rgba(0, 168, 255, 0.2);
-    }
-
-    .ls-position-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin: 15px 0;
-    }
-
-    .ls-slider-group {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .ls-slider-group label {
-      min-width: 70px;
-      font-weight: 600;
-      color: #444;
-      font-size: 15px;
-    }
-
-    .ls-position-slider {
-      flex-grow: 1;
-      height: 6px;
-      -webkit-appearance: none;
-      background: #e9ecef;
-      border-radius: 3px;
-      outline: none;
-    }
-
-    .ls-position-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--accent-color);
-      cursor: pointer;
-      box-shadow: 0 0 5px rgba(0, 168, 255, 0.2);
-    }
-
-    .ls-batch-progress {
-      margin: 15px 0;
-      display: none;
-      text-align: center;
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: var(--border-radius);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    .ls-progress-bar {
-      width: 100%;
-      background-color: #e9ecef;
-      border-radius: 6px;
-      margin: 12px 0;
-      height: 12px;
-      overflow: hidden;
-    }
-
-    .ls-progress {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-color), var(--primary-blue));
-      border-radius: 6px;
-      width: 0%;
-      transition: width 0.3s;
-      position: relative;
-    }
-
-    .ls-progress::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, 
-        transparent, 
-        rgba(255, 255, 255, 0.5), 
-        transparent);
-      animation: progressAnimation 1.5s infinite linear;
-    }
-
-    @keyframes progressAnimation {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 15px;
-    }
-
-    .btn-group .ls-btn {
-      flex: 1;
-      min-width: 180px;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 15px;
-      }
-      
-      .login-container {
-        padding: 30px 20px;
-      }
-      
-      .page-title {
-        font-size: 26px;
-      }
-      
-      .custom-logo {
-        width: 140px;
-      }
-      
-      .ls-title {
-        font-size: 24px;
-      }
-      
-      .ls-subtitle {
-        font-size: 16px;
-      }
-      
-      .ls-file-inputs {
-        flex-direction: column;
-      }
-      
-      .btn-group .ls-btn {
-        min-width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
-      
-      .login-container {
-        padding: 25px 15px;
-      }
-      
-      .page-title {
-        font-size: 24px;
-      }
-      
-      .subtitle {
-        font-size: 16px;
-      }
-      
-      .custom-logo {
-        width: 120px;
-      }
-      
-      .ls-btn {
-        padding: 10px;
-        font-size: 14px;
-      }
-      
-      .ls-title {
-        font-size: 22px;
-      }
-      
-      .ls-subtitle {
-        font-size: 15px;
-      }
-      
-      .ls-thumbnail {
-        width: 100px;
-        height: 100px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0f2a4a">
+    <title>| طلب مقابلة مدير فرع توزيع كهرباء الرصافة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c6fbb;
+            --secondary: #4ca1af;
+            --accent: #ff7e5f;
+            --dark: #0f2a4a;
+            --darker: #091c33;
+            --light: #f4f7fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --success: #22c55e;
+            --whatsapp: #25D366;
+            --alert: #ef4444;
+            --alert-glow: rgba(239, 68, 68, 0.55);
+            --radius-lg: 26px;
+            --radius-md: 20px;
+            --shadow-sm: 0 4px 14px rgba(15, 42, 74, 0.08);
+            --shadow-md: 0 10px 28px rgba(15, 42, 74, 0.14);
+            --ease: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body { height: 100%; }
+
+        body {
+            background: var(--light);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            padding-bottom: calc(70px + env(safe-area-inset-bottom));
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== شاشة البداية ========== */
+        .splash {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 30%, #1d4e8a 0%, var(--dark) 55%, var(--darker) 100%);
+            padding: 24px;
+            animation: splashExit 0.7s var(--ease) 2.4s forwards;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 32px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+            animation: logoPop 0.9s var(--ease), float 2.6s ease-in-out 0.9s infinite;
+            border: 4px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .splash-logo img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            padding: 8px;
+            display: block;
+        }
+
+        .splash-company {
+            margin-top: 24px;
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+
+        .splash-title {
+            margin-top: 6px;
+            font-size: 26px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 0.3px;
+            text-align: center;
+        }
+
+        .splash-branch {
+            margin-top: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffd166;
+            text-align: center;
+        }
+
+        .splash-sub {
+            margin-top: 14px;
+            font-size: 13.5px;
+            color: rgba(255, 255, 255, 0.72);
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .loader {
+            margin-top: 32px;
+            width: 190px;
+            height: 5px;
+            border-radius: 99px;
+            background: rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+        }
+
+        .loader-bar {
+            height: 100%;
+            width: 0;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--accent), #ffd166);
+            animation: load 2.2s ease-in-out forwards;
+        }
+
+        @keyframes load { to { width: 100%; } }
+        @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
+        @keyframes logoPop { 0% { transform: scale(0.6); opacity: 0 } 100% { transform: scale(1); opacity: 1 } }
+        @keyframes splashExit { to { opacity: 0; visibility: hidden; } }
+
+        /* ========== التطبيق ========== */
+        .app {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 0 18px;
+            opacity: 0;
+            animation: appIn 0.6s var(--ease) 0.2s forwards;
+        }
+
+        @keyframes appIn { to { opacity: 1; } }
+
+        /* الهيدر */
+        .app-header {
+            position: relative;
+            margin: 0 -18px 0;
+            padding: 30px 22px 90px;
+            background: linear-gradient(160deg, var(--dark) 0%, #1d4e8a 70%, var(--primary) 100%);
+            border-bottom-left-radius: 36px;
+            border-bottom-right-radius: 36px;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .app-header::after {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            top: -80px;
+            left: -60px;
+        }
+
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+            flex-shrink: 0;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .brand-icon img {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            padding: 5px;
+            display: block;
+        }
+
+        .brand-text { min-width: 0; }
+
+        .brand-company {
+            font-size: 11.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.72);
+            line-height: 1.3;
+        }
+
+        .brand-name {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            line-height: 1.35;
+        }
+
+        .brand-branch {
+            font-size: 12px;
+            font-weight: 500;
+            color: #ffd166;
+            line-height: 1.3;
+        }
+
+        .header-title {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+            line-height: 1.4;
+        }
+
+        .header-title span {
+            color: #ffd166;
+        }
+
+        .header-desc {
+            margin-top: 6px;
+            font-size: 13.5px;
+            color: rgba(255, 255, 255, 0.78);
+            position: relative;
+            z-index: 1;
+            max-width: 320px;
+        }
+
+        /* بطاقة المدير العائمة */
+        .manager-card {
+            position: relative;
+            margin: -68px auto 22px;
+            max-width: 460px;
+            background: var(--card);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(15, 42, 74, 0.05);
+        }
+
+        .manager-avatar {
+            width: 66px;
+            height: 66px;
+            border-radius: 22px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 3px solid #fff;
+            box-shadow: 0 6px 16px rgba(15, 42, 74, 0.18);
+            background: linear-gradient(145deg, var(--secondary), #3d9e8f);
+        }
+
+        .manager-avatar img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .manager-info { min-width: 0; }
+
+        .manager-info h4 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .manager-info p {
+            font-size: 12.5px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .status-dot {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--success);
+            background: rgba(34, 197, 94, 0.1);
+            padding: 3px 10px;
+            border-radius: 99px;
+        }
+
+        .status-dot::before {
+            content: '';
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0.3; } }
+
+        /* عنوان القسم */
+        .section-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--muted);
+            margin: 6px 4px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, #dfe6ef, transparent);
+        }
+
+        /* ========== بطاقات التطبيقات ========== */
+        .app-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .app-card {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--card);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(15, 42, 74, 0.04);
+            cursor: pointer;
+            transition: transform 0.18s var(--ease), box-shadow 0.25s var(--ease);
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .app-card:active {
+            transform: scale(0.965);
+            box-shadow: 0 2px 8px rgba(15, 42, 74, 0.1);
+        }
+
+        .app-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-md);
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(44, 111, 187, 0.12), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .app-card:active::after { opacity: 1; }
+
+        .app-card .icon-box {
+            width: 62px;
+            height: 62px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: #fff;
+            flex-shrink: 0;
+            position: relative;
+            transition: transform 0.25s var(--ease);
+        }
+
+        .app-card:active .icon-box { transform: scale(0.92); }
+
+        .app-card.citizen .icon-box {
+            background: linear-gradient(145deg, #57b8c4, #3d9e8f);
+            box-shadow: 0 8px 18px rgba(76, 161, 175, 0.35);
+        }
+
+        .app-card.employee .icon-box {
+            background: linear-gradient(145deg, #ff9a7b, #ff6347);
+            box-shadow: 0 8px 18px rgba(255, 126, 95, 0.35);
+        }
+
+        .app-card .content { flex: 1; min-width: 0; }
+
+        .app-card h3 {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            line-height: 1.4;
+        }
+
+        .app-card .badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 99px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .citizen .badge { background: linear-gradient(135deg, #57b8c4, #3d9e8f); }
+        .employee .badge { background: linear-gradient(135deg, #ff9a7b, #ff6347); }
+
+        .app-card p {
+            font-size: 12.5px;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .app-card .arrow {
+            width: 34px;
+            height: 34px;
+            border-radius: 12px;
+            background: #f1f5fa;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            flex-shrink: 0;
+            transition: transform 0.25s var(--ease), background 0.25s;
+        }
+
+        .app-card:active .arrow {
+            transform: translateX(-4px);
+            background: #e3edf9;
+        }
+
+        /* ========== الشريط السفلي المتحرك (Marquee) ========== */
+        .marquee-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: linear-gradient(90deg, var(--dark), var(--primary), var(--dark));
+            color: #fff;
+            padding: 14px 0 calc(14px + env(safe-area-inset-bottom));
+            overflow: hidden;
+            box-shadow: 0 -6px 22px rgba(15, 42, 74, 0.25);
+            border-top: 2px solid var(--whatsapp);
+        }
+
+        .marquee-track {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            white-space: nowrap;
+            width: max-content;
+            animation: marqueeLTR 22s linear infinite;
+            will-change: transform;
+        }
+
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14.5px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        /* أيقونة واتساب (الشريطان الأول والثاني) */
+        .marquee-item i.wa {
+            color: var(--whatsapp);
+            font-size: 19px;
+            animation: pulseIcon 1.6s ease-in-out infinite;
+        }
+
+        /* أيقونة التنبيه الحمراء البارزة (شريطا المواعيد) */
+        .marquee-item i.alert-icon {
+            color: #fff;
+            font-size: 14px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--alert);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 0 0 var(--alert-glow);
+            animation: alertPulse 1.4s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes alertPulse {
+            0% {
+                box-shadow: 0 0 0 0 var(--alert-glow);
+                transform: scale(1);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+                transform: scale(1.08);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+                transform: scale(1);
+            }
+        }
+
+        .marquee-item .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ffd166;
+            display: inline-block;
+        }
+
+        @keyframes marqueeLTR {
+            0%   { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        @keyframes pulseIcon {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.15); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .marquee-track { animation: none; justify-content: center; width: 100%; }
+            .marquee-item i.wa { animation: none; }
+            .marquee-item i.alert-icon { animation: none; }
+        }
+
+        /* توست */
+        .toast {
+            position: fixed;
+            bottom: calc(80px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translate(-50%, 20px);
+            background: var(--dark);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 11px 22px;
+            border-radius: 99px;
+            box-shadow: 0 10px 30px rgba(15, 42, 74, 0.3);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.35s var(--ease);
+            z-index: 100;
+            white-space: nowrap;
+            max-width: 90vw;
+            text-align: center;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translate(-50%, 0);
+        }
+
+        /* شاشات صغيرة جداً */
+        @media (max-width: 360px) {
+            .app-card { padding: 14px; gap: 12px; }
+            .app-card .icon-box { width: 54px; height: 54px; font-size: 24px; border-radius: 17px; }
+            .app-card h3 { font-size: 15px; }
+            .app-card p { font-size: 11.5px; }
+            .header-title { font-size: 19px; }
+            .brand-icon { width: 44px; height: 44px; }
+            .splash-logo { width: 100px; height: 100px; }
+            .marquee-item { font-size: 13px; }
+            .brand-company { font-size: 10.5px; }
+            .brand-name { font-size: 17px; }
+            .brand-branch { font-size: 11px; }
+            .splash-company { font-size: 12px; }
+            .splash-title { font-size: 22px; }
+            .splash-branch { font-size: 13px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <!-- واجهة تسجيل الدخول -->
-    <div id="loginContainer" class="login-container">
-      <div class="header">
-        <div class="logo">
-          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgOQKcOujR3M9GdGSF_Vf4zo4JZ27NaniO-lB4lL9Eb7FWAkuizcFTQ7IrovJ6-MtHHhgE3QcpicE_c0o7FNn5LBPEEgK27TBgdRJamUhyphenhyphenmn2WQt4tkZxICudzp2L_yrt6wEogVLLb4Xzo/s1600/80755801_2654045651298178_3882047473715249152_n.jpg" 
-               alt="شعار توزيع كهرباء الرصافة" 
-               class="custom-logo">
+
+    <!-- شاشة البداية -->
+    <div class="splash">
+        <div class="splash-logo">
+            <img src="img/2.jpg" alt="شعار وزارة الكهرباء">
         </div>
-        <h1 class="page-title">برنامج اضافة الشعار</h1>
-        <p class="subtitle">اعلام فرع توزيع كهرباء الرصافة</p>
-      </div>
-      
-      <div class="form-group">
-        <label for="username"><i class="fas fa-user"></i> اسم المستخدم</label>
-        <input type="text" id="username" class="form-control" placeholder="أدخل اسم المستخدم">
-        <div id="usernameError" class="error-message">يجب إدخال اسم المستخدم</div>
-      </div>
-      
-      <div class="form-group">
-        <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
-        <div style="position: relative;">
-          <input type="password" id="password" class="form-control" placeholder="أدخل كلمة المرور">
-          <i id="togglePassword" class="password-toggle fas fa-eye"></i>
-        </div>
-        <div id="passwordError" class="error-message">يجب إدخال كلمة المرور</div>
-      </div>
-      
-      <button id="submitLogin" class="login-btn">
-        <i class="fas fa-sign-in-alt"></i> تسجيل الدخول
-      </button>
-      <div class="spinner" id="loginSpinner"></div>
+        <div class="splash-company">الشركة العامة لتوزيع كهرباء بغداد</div>
+        <div class="splash-branch">فرع توزيع كهرباء الرصافة</div>
+        <div class="splash-sub">تطبيق مقابلة مدير فرع توزيع كهرباء الرصافة</div>
+        <div class="loader"><div class="loader-bar"></div></div>
     </div>
-    
-    <!-- برنامج اضافة الشعار (مخفي في البداية) -->
-    <div id="logoSystemContainer" class="ls-container">
-      <h1 class="ls-title">برنامج إضافة الشعار على الصور</h1>
-      <h2 class="ls-subtitle">اعلام فرع توزيع كهرباء الرصافة</h2>
-      
-      <div class="ls-instructions">
-        <div class="ls-step">1. اختر الشعار (PNG شفاف)</div>
-        <div class="ls-step">2. اختر مجموعة الصور (حتى 15 صورة)</div>
-        <div class="ls-step">3. اضبط موقع وحجم الشعار على الصورة الأولى</div>
-        <div class="ls-step">4. اضغط "تطبيق على الكل" لمعالجة جميع الصور</div>
-        <div class="ls-step">5. احفظ الصور فرديًا أو أعد تعيين النظام</div>
-      </div>
 
-      <div class="ls-file-inputs">
-        <div class="ls-file-input-container">
-          <button id="lsUploadLogoBtn" class="ls-btn">
-            <i class="fas fa-upload"></i> تحميل الشعار
-          </button>
-          <input type="file" id="lsLogoInput" accept="image/png" style="display:none;">
-          <img id="lsLogoPreview" class="ls-logo-preview" alt="معاينة الشعار" style="display:none;">
-        </div>
-        
-        <div class="ls-file-input-container">
-          <button id="lsUploadImagesBtn" class="ls-btn">
-            <i class="fas fa-images"></i> تحميل مجموعة الصور
-          </button>
-          <input type="file" id="lsImagesInput" accept="image/*" multiple style="display:none;">
-          <div class="ls-thumbnails" id="lsThumbnails"></div>
-        </div>
-      </div>
+    <!-- التطبيق -->
+    <div class="app" id="app">
+        <header class="app-header">
+            <div class="brand-row">
+                <div class="brand-icon">
+                    <img src="img/2.jpg" alt="شعار وزارة الكهرباء">
+                </div>
+                <div class="brand-text">
+                    <div class="brand-company">الشركة العامة لتوزيع كهرباء بغداد</div>
+                    <div class="brand-branch">فرع توزيع كهرباء الرصافة</div>
+                </div>
+            </div>
+            <h1 class="header-title">طلب مقابلة <span>مدير فرع توزيع كهرباء الرصافة</span></h1>
+            <p class="header-desc">اختر نوع الطلب وسيتم التواصل معكم عبر تطبيق وتساب</p>
+        </header>
 
-      <canvas id="lsCanvas" class="ls-canvas" style="display:none;"></canvas>
+        <!-- بطاقة المدير -->
+        <div class="manager-card">
+            <div class="manager-avatar">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="صورة مدير الفرع">
+            </div>
+            <div class="manager-info">
+                <h4>مدير الفرع</h4>
+                <p>مكتب مدير الفرع</p>
+                <span class="status-dot">متاح لاستقبال الطلبات</span>
+            </div>
+        </div>
 
-      <div class="ls-controls" id="lsControls" style="display:none;">
-        <div class="ls-slider-container">
-          <div class="slider-with-value">
-            <input type="range" id="lsScaleSlider" class="ls-slider" min="0.1" max="1.0" step="0.01" value="0.25">
-            <span id="scaleValue" class="slider-value">25%</span>
-          </div>
-          <div style="margin: 8px; text-align: center;">
-            <small>استخدم الشريط لتكبير/تصغير الشعار</small>
-          </div>
-        </div>
-        
-        <div class="ls-position-controls">
-          <div class="ls-slider-group">
-            <label for="lsXPosition"><i class="fas fa-arrows-alt-h"></i> الموقع الأفقي:</label>
-            <input type="range" id="lsXPosition" class="ls-position-slider" min="0" max="100" step="1" value="50">
-          </div>
-          
-          <div class="ls-slider-group">
-            <label for="lsYPosition"><i class="fas fa-arrows-alt-v"></i> الموقع الرأسي:</label>
-            <input type="range" id="lsYPosition" class="ls-position-slider" min="0" max="100" step="1" value="50">
-          </div>
-        </div>
-        
-        <div style="text-align: center; margin: 12px 0; color: #555;">
-          <small>استخدم الأشرطة لتحريك الشعار أفقياً وعمودياً</small><br>
-          <small>أو اسحب الشعار مباشرة على الصورة</small>
-        </div>
-      </div>
+        <!-- قسم الطلبات -->
+        <div class="section-label"><i class="fas fa-layer-group"></i> نوع الطلب</div>
 
-      <div class="ls-batch-progress" id="lsBatchProgress">
-        <h3>جاري معالجة الصور...</h3>
-        <div class="ls-progress-bar">
-          <div class="ls-progress" id="lsProgressBar"></div>
-        </div>
-        <p id="lsProgressText">0/0</p>
-      </div>
+        <div class="app-list">
+            <!-- بطاقة المواطنين -->
+            <a class="app-card citizen" href="https://forms.gle/yourCitizenFormLink" target="_blank" rel="noopener noreferrer"
+               onclick="handleForm(event, this, 'نموذج المواطنين')">
+                <div class="icon-box"><i class="fas fa-users"></i></div>
+                <div class="content">
+                    <h3>تقديم طلب مقابلة للمواطنين <span class="badge">مواطن</span></h3>
+                    <p>شكاوى، اقتراحات، واستفسارات حول الخدمات</p>
+                </div>
+                <div class="arrow"><i class="fas fa-arrow-left"></i></div>
+            </a>
 
-      <div class="btn-group">
-        <button id="lsAddLogoBtn" class="ls-btn" disabled>
-          <i class="fas fa-plus-circle"></i> إضافة الشعار
-        </button>
-        <button id="lsApplyToAllBtn" class="ls-btn ls-btn-success" disabled>
-          <i class="fas fa-cogs"></i> تطبيق على الكل
-        </button>
-        <button id="lsDownloadBtn" class="ls-btn" style="display:none;">
-          <i class="fas fa-download"></i> تحميل الصورة
-        </button>
-        <button id="lsResetBtn" class="ls-btn ls-btn-danger">
-          <i class="fas fa-redo"></i> إعادة تعيين
-        </button>
-        <button id="lsLogoutBtn" class="ls-btn">
-          <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
-        </button>
-      </div>
+            <!-- بطاقة الموظفين -->
+            <a class="app-card employee" href="https://forms.gle/yourEmployeeFormLink" target="_blank" rel="noopener noreferrer"
+               onclick="handleForm(event, this, 'نموذج الموظفين')">
+                <div class="icon-box"><i class="fas fa-user-tie"></i></div>
+                <div class="content">
+                    <h3>تقديم طلب مقابلة للموظفين <span class="badge">موظف</span></h3>
+                    <p>أمور وظيفية، اقتراحات تطويرية، ودعم الأداء</p>
+                </div>
+                <div class="arrow"><i class="fas fa-arrow-left"></i></div>
+            </a>
+        </div>
     </div>
-  </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // عناصر تسجيل الدخول
-      const loginContainer = document.getElementById('loginContainer');
-      const submitLogin = document.getElementById('submitLogin');
-      const usernameInput = document.getElementById('username');
-      const passwordInput = document.getElementById('password');
-      const usernameError = document.getElementById('usernameError');
-      const passwordError = document.getElementById('passwordError');
-      const loginSpinner = document.getElementById('loginSpinner');
-      const logoSystemContainer = document.getElementById('logoSystemContainer');
-      const lsLogoutBtn = document.getElementById('lsLogoutBtn');
-      const togglePassword = document.getElementById('togglePassword');
+    <!-- الشريط السفلي المتحرك -->
+    <div class="marquee-bar" role="marquee" aria-label="إشعارات التواصل والمواعيد">
+        <div class="marquee-track">
+            <span class="marquee-item">
+                <i class="fab fa-whatsapp wa"></i>
+                سيتم التواصل معكم عبر تطبيق واتساب
+                <span class="dot"></span>
+            </span>
+            <span class="marquee-item">
+                <i class="fab fa-whatsapp wa"></i>
+                يرجى التأكد من رقم هاتفكم عند تقديم الطلب
+                <span class="dot"></span>
+            </span>
+            <span class="marquee-item">
+                <i class="fas fa-triangle-exclamation alert-icon"></i>
+                موعد المقابلة يوم الثلاثاء من كل اسبوع
+                <span class="dot"></span>
+            </span>
+            <span class="marquee-item">
+                <i class="fas fa-triangle-exclamation alert-icon"></i>
+                موعد تقديم الطلب يوم الخميس من كل اسبوع
+                <span class="dot"></span>
+            </span>
+        </div>
+    </div>
 
-      // وظيفة إظهار/إخفاء كلمة المرور
-      togglePassword.addEventListener('click', function() {
-        if (passwordInput.type === 'password') {
-          passwordInput.type = 'text';
-          this.classList.remove('fa-eye');
-          this.classList.add('fa-eye-slash');
-        } else {
-          passwordInput.type = 'password';
-          this.classList.remove('fa-eye-slash');
-          this.classList.add('fa-eye');
-        }
-      });
+    <!-- توست -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-      // التحقق من بيانات الدخول
-      submitLogin.addEventListener('click', function() {
-        let isValid = true;
-        
-        if (usernameInput.value.trim() === '') {
-          usernameError.style.display = 'block';
-          isValid = false;
-        } else {
-          usernameError.style.display = 'none';
-        }
-        
-        if (passwordInput.value.trim() === '') {
-          passwordError.style.display = 'block';
-          isValid = false;
-        } else {
-          passwordError.style.display = 'none';
-        }
-        
-        if (isValid) {
-          loginSpinner.style.display = 'block';
-          
-          // Simulate login process
-          setTimeout(() => {
-            // بيانات الدخول: media و 123
-            const validCredentials = {
-              username: 'media',
-              password: '202cb962ac59075b964b07152d234b70' // MD5 hash for '123'
-            };
-            
-            const enteredUsername = usernameInput.value.trim();
-            const enteredPassword = CryptoJS.MD5(passwordInput.value.trim()).toString();
-            
-            if (enteredUsername === validCredentials.username && 
-                enteredPassword === validCredentials.password) {
-              
-              // إخفاء واجهة تسجيل الدخول
-              loginContainer.style.display = 'none';
-              
-              // إظهار برنامج اضافة الشعار
-              logoSystemContainer.classList.add('active');
-              
-            } else {
-              usernameError.textContent = 'اسم المستخدم أو كلمة المرور غير صحيحة';
-              usernameError.style.display = 'block';
-              passwordError.style.display = 'none';
-            }
-            
-            loginSpinner.style.display = 'none';
-          }, 1500);
-        }
-      });
-
-      // زر تسجيل الخروج
-      lsLogoutBtn.addEventListener('click', function() {
-        // إظهار واجهة تسجيل الدخول
-        loginContainer.style.display = 'block';
-        
-        // إخفاء برنامج اضافة الشعار
-        logoSystemContainer.classList.remove('active');
-        
-        // Reset form
-        usernameInput.value = '';
-        passwordInput.value = '';
-        usernameError.style.display = 'none';
-        passwordError.style.display = 'none';
-        
-        // إعادة تعيين نظام الشعارات
-        lsResetSystem();
-      });
-
-      // Logo System Elements
-      const lsUploadLogoBtn = document.getElementById('lsUploadLogoBtn');
-      const lsLogoInput = document.getElementById('lsLogoInput');
-      const lsLogoPreview = document.getElementById('lsLogoPreview');
-      const lsUploadImagesBtn = document.getElementById('lsUploadImagesBtn');
-      const lsImagesInput = document.getElementById('lsImagesInput');
-      const lsThumbnailsContainer = document.getElementById('lsThumbnails');
-      const lsCanvas = document.getElementById('lsCanvas');
-      const lsCtx = lsCanvas.getContext('2d');
-      const lsAddLogoBtn = document.getElementById('lsAddLogoBtn');
-      const lsApplyToAllBtn = document.getElementById('lsApplyToAllBtn');
-      const lsDownloadBtn = document.getElementById('lsDownloadBtn');
-      const lsResetBtn = document.getElementById('lsResetBtn');
-      const lsScaleSlider = document.getElementById('lsScaleSlider');
-      const scaleValue = document.getElementById('scaleValue');
-      const lsXPositionSlider = document.getElementById('lsXPosition');
-      const lsYPositionSlider = document.getElementById('lsYPosition');
-      const lsControls = document.getElementById('lsControls');
-      const lsBatchProgress = document.getElementById('lsBatchProgress');
-      const lsProgressBar = document.getElementById('lsProgressBar');
-      const lsProgressText = document.getElementById('lsProgressText');
-      
-      // متغيرات النظام
-      let lsLogoImage = new Image();
-      let lsCurrentImages = [];
-      let lsCurrentIndex = 0;
-      let lsLogoX = 0, lsLogoY = 0, lsLogoScale = 0.25;
-      let lsIsDragging = false;
-      let lsDragStartX = 0, lsDragStartY = 0;
-      let lsLogoWidth = 0, lsLogoHeight = 0;
-
-      // تحديث قيمة شريط التكبير/التصغير
-      function updateScaleValue() {
-        const value = Math.round(parseFloat(lsScaleSlider.value) * 100);
-        scaleValue.textContent = value + '%';
-      }
-
-      // أحداث النظام
-      lsUploadLogoBtn.addEventListener('click', () => lsLogoInput.click());
-      lsUploadImagesBtn.addEventListener('click', () => lsImagesInput.click());
-      
-      // تحديث قيمة شريط التكبير عند التغيير
-      lsScaleSlider.addEventListener('input', function() {
-        updateScaleValue();
-        lsLogoScale = parseFloat(this.value);
-        lsDrawCanvas();
-        
-        const xPercent = (lsLogoX / (lsCanvas.width - lsLogoWidth)) * 100;
-        const yPercent = (lsLogoY / (lsCanvas.height - lsLogoHeight)) * 100;
-        lsXPositionSlider.value = xPercent;
-        lsYPositionSlider.value = yPercent;
-      });
-
-      lsLogoInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          lsLogoImage.onload = () => {
-            lsLogoPreview.src = e.target.result;
-            lsLogoPreview.style.display = 'block';
-            lsCheckReadyState();
-          }
-          lsLogoImage.src = e.target.result;
-        }
-        reader.readAsDataURL(file);
-      });
-
-      lsImagesInput.addEventListener('change', (e) => {
-        const files = Array.from(e.target.files).slice(0, 15);
-        if (files.length === 0) return;
-        
-        lsCurrentImages = [];
-        lsThumbnailsContainer.innerHTML = '';
-        
-        files.forEach((file, index) => {
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-              lsCurrentImages.push({
-                file: file,
-                url: e.target.result,
-                img: img
-              });
-              
-              const thumb = document.createElement('img');
-              thumb.src = e.target.result;
-              thumb.className = 'ls-thumbnail';
-              thumb.dataset.index = index;
-              thumb.addEventListener('click', () => lsShowImage(index));
-              lsThumbnailsContainer.appendChild(thumb);
-              
-              if (index === 0) lsShowImage(0);
-              lsCheckReadyState();
-            };
-            img.src = e.target.result;
-          };
-          reader.readAsDataURL(file);
+    <script>
+        // إخفاء شاشة البداية
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.splash').style.display = 'none';
+            }, 3100);
         });
-      });
 
-      function lsShowImage(index) {
-        if (index < 0 || index >= lsCurrentImages.length) return;
-        
-        lsCurrentIndex = index;
-        document.querySelectorAll('.ls-thumbnail').forEach((thumb, i) => {
-          thumb.classList.toggle('active', i === index);
-        });
-        
-        lsDrawCanvas();
-      }
-
-      function lsCheckReadyState() {
-        lsAddLogoBtn.disabled = !(lsLogoImage.src && lsCurrentImages.length > 0);
-        lsApplyToAllBtn.disabled = !(lsLogoImage.src && lsCurrentImages.length > 0);
-      }
-
-      function lsCalculateLogoDimensions() {
-        lsLogoWidth = lsCanvas.width * lsLogoScale;
-        lsLogoHeight = lsLogoImage.height * (lsLogoWidth / lsLogoImage.width);
-      }
-
-      function lsIsCursorOnLogo(x, y) {
-        return x >= lsLogoX && x <= lsLogoX + lsLogoWidth && 
-               y >= lsLogoY && y <= lsLogoY + lsLogoHeight;
-      }
-
-      lsAddLogoBtn.addEventListener('click', () => {
-        if (lsCurrentImages.length === 0) return;
-        
-        const img = lsCurrentImages[lsCurrentIndex].img;
-        let width = img.width;
-        let height = img.height;
-        const maxSize = 1200;
-        
-        if (width > maxSize || height > maxSize) {
-          const ratio = Math.min(maxSize / width, maxSize / height);
-          width = Math.floor(width * ratio);
-          height = Math.floor(height * ratio);
-        }
-        
-        lsCanvas.width = width;
-        lsCanvas.height = height;
-
-        lsCalculateLogoDimensions();
-        lsLogoX = (width - lsLogoWidth) / 2;
-        lsLogoY = (height - lsLogoHeight) / 2;
-
-        lsXPositionSlider.value = 50;
-        lsYPositionSlider.value = 50;
-
-        lsDrawCanvas();
-
-        lsCanvas.style.display = 'block';
-        lsControls.style.display = 'block';
-        lsDownloadBtn.style.display = 'inline-block';
-        updateScaleValue(); // تحديث قيمة شريط التكبير عند الإضافة
-      });
-
-      function lsDrawCanvas() {
-        if (lsCurrentImages.length === 0) return;
-        
-        const img = lsCurrentImages[lsCurrentIndex].img;
-        lsCtx.clearRect(0, 0, lsCanvas.width, lsCanvas.height);
-        
-        lsCtx.drawImage(img, 0, 0, lsCanvas.width, lsCanvas.height);
-        
-        if (lsLogoImage.src) {
-          lsCalculateLogoDimensions();
-          lsCtx.imageSmoothingEnabled = true;
-          lsCtx.imageSmoothingQuality = 'high';
-          lsCtx.drawImage(lsLogoImage, lsLogoX, lsLogoY, lsLogoWidth, lsLogoHeight);
-        }
-      }
-
-      lsXPositionSlider.addEventListener('input', function() {
-        const width = lsCanvas.width;
-        lsLogoX = (parseInt(this.value) / 100) * (width - lsLogoWidth);
-        lsDrawCanvas();
-      });
-
-      lsYPositionSlider.addEventListener('input', function() {
-        const height = lsCanvas.height;
-        lsLogoY = (parseInt(this.value) / 100) * (height - lsLogoHeight);
-        lsDrawCanvas();
-      });
-
-      lsCanvas.addEventListener('mousedown', (e) => {
-        const rect = lsCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        if (lsIsCursorOnLogo(x, y)) {
-          lsIsDragging = true;
-          lsDragStartX = x - lsLogoX;
-          lsDragStartY = y - lsLogoY;
-          lsCanvas.style.cursor = 'grabbing';
-        }
-      });
-
-      lsCanvas.addEventListener('mousemove', (e) => {
-        const rect = lsCanvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        if (lsIsDragging) {
-          lsLogoX = x - lsDragStartX;
-          lsLogoY = y - lsDragStartY;
-          
-          lsLogoX = Math.max(0, Math.min(lsCanvas.width - lsLogoWidth, lsLogoX));
-          lsLogoY = Math.max(0, Math.min(lsCanvas.height - lsLogoHeight, lsLogoY));
-          
-          const xPercent = (lsLogoX / (lsCanvas.width - lsLogoWidth)) * 100;
-          const yPercent = (lsLogoY / (lsCanvas.height - lsLogoHeight)) * 100;
-          lsXPositionSlider.value = xPercent;
-          lsYPositionSlider.value = yPercent;
-          
-          lsDrawCanvas();
-        } else if (lsIsCursorOnLogo(x, y)) {
-          lsCanvas.style.cursor = 'grab';
-        } else {
-          lsCanvas.style.cursor = 'default';
-        }
-      });
-
-      lsCanvas.addEventListener('mouseup', () => {
-        lsIsDragging = false;
-        lsCanvas.style.cursor = 'default';
-      });
-
-      lsCanvas.addEventListener('mouseleave', () => {
-        lsIsDragging = false;
-        lsCanvas.style.cursor = 'default';
-      });
-
-      lsDownloadBtn.addEventListener('click', () => {
-        if (lsCurrentImages.length === 0) return;
-        
-        const link = document.createElement('a');
-        link.download = `صورة_مع_شعار_${lsCurrentIndex + 1}.png`;
-        link.href = lsCanvas.toDataURL('image/png');
-        link.click();
-      });
-
-      lsApplyToAllBtn.addEventListener('click', async () => {
-        if (lsCurrentImages.length === 0 || !lsLogoImage.src) return;
-        
-        lsBatchProgress.style.display = 'block';
-        lsProgressBar.style.width = '0%';
-        lsProgressText.textContent = `0/${lsCurrentImages.length}`;
-        
-        const savedX = lsLogoX;
-        const savedY = lsLogoY;
-        const savedScale = lsLogoScale;
-        const savedCanvasWidth = lsCanvas.width;
-        const savedCanvasHeight = lsCanvas.height;
-        
-        // دالة لتنزيل الصور مع تأخير
-        const downloadImagesSequentially = async () => {
-          for (let i = 0; i < lsCurrentImages.length; i++) {
-            const img = lsCurrentImages[i].img;
-            
-            let width = img.width;
-            let height = img.height;
-            const maxSize = 1200;
-            
-            if (width > maxSize || height > maxSize) {
-              const ratio = Math.min(maxSize / width, maxSize / height);
-              width = Math.floor(width * ratio);
-              height = Math.floor(height * ratio);
-            }
-            
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = width;
-            tempCanvas.height = height;
-            const tempCtx = tempCanvas.getContext('2d');
-            
-            tempCtx.drawImage(img, 0, 0, width, height);
-            
-            const currentLogoWidth = width * savedScale;
-            const currentLogoHeight = lsLogoImage.height * (currentLogoWidth / lsLogoImage.width);
-            
-            const relativeX = (savedX / savedCanvasWidth) * width;
-            const relativeY = (savedY / savedCanvasHeight) * height;
-            
-            tempCtx.imageSmoothingEnabled = true;
-            tempCtx.imageSmoothingQuality = 'high';
-            tempCtx.drawImage(lsLogoImage, relativeX, relativeY, currentLogoWidth, currentLogoHeight);
-            
-            // إنشاء رابط التنزيل
-            const link = document.createElement('a');
-            link.download = `صورة_مع_شعار_${i + 1}.png`;
-            link.href = tempCanvas.toDataURL('image/png');
-            
-            // إضافة الرابط إلى DOM مؤقتًا
-            document.body.appendChild(link);
-            link.click();
-            
-            // تأخير قبل إزالة الرابط والمتابعة إلى الصورة التالية
-            await new Promise(resolve => {
-              setTimeout(() => {
-                document.body.removeChild(link);
-                resolve();
-              }, 300); // تأخير كافٍ لتنزيل كل صورة
+        // تأثير اللمس الديناميكي (موضع التوهج)
+        document.querySelectorAll('.app-card').forEach(card => {
+            card.addEventListener('pointerdown', e => {
+                const rect = card.getBoundingClientRect();
+                card.style.setProperty('--x', (e.clientX - rect.left) + 'px');
+                card.style.setProperty('--y', (e.clientY - rect.top) + 'px');
             });
-            
-            lsProgressBar.style.width = `${((i + 1) / lsCurrentImages.length) * 100}%`;
-            lsProgressText.textContent = `${i + 1}/${lsCurrentImages.length}`;
-          }
-        };
-        
-        await downloadImagesSequentially();
-        lsBatchProgress.style.display = 'none';
-      });
 
-      function lsResetSystem() {
-        // إعادة تعيين جميع المتغيرات
-        lsLogoImage = new Image();
-        lsCurrentImages = [];
-        lsCurrentIndex = 0;
-        lsLogoX = 0;
-        lsLogoY = 0;
-        lsLogoScale = 0.25;
-        
-        // إعادة تعيين واجهة المستخدم
-        lsLogoPreview.src = '';
-        lsLogoPreview.style.display = 'none';
-        lsThumbnailsContainer.innerHTML = '';
-        lsCanvas.style.display = 'none';
-        lsControls.style.display = 'none';
-        lsDownloadBtn.style.display = 'none';
-        lsBatchProgress.style.display = 'none';
-        
-        // إعادة تعيين عناصر التحكم
-        lsScaleSlider.value = 0.25;
-        lsXPositionSlider.value = 50;
-        lsYPositionSlider.value = 50;
-        
-        // تحديث قيمة شريط التكبير
-        updateScaleValue();
-        
-        // إعادة تعيين حالة الأزرار
-        lsAddLogoBtn.disabled = true;
-        lsApplyToAllBtn.disabled = true;
-        
-        // إعادة تعيين حقول الرفع
-        lsLogoInput.value = '';
-        lsImagesInput.value = '';
-      }
+            card.addEventListener('click', () => {
+                if (navigator.vibrate) navigator.vibrate(10);
+            });
+        });
 
-      lsResetBtn.addEventListener('click', lsResetSystem);
-    });
-  </script>
+        // معالجة فتح النموذج
+        function handleForm(event, el, name) {
+            const url = el.getAttribute('href') || '';
+            if (!url || url.includes('yourCitizenFormLink') || url.includes('yourEmployeeFormLink')) {
+                event.preventDefault();
+                showToast('⚠️ استبدل رابط النموذج بالرابط الفعلي');
+                return;
+            }
+            showToast('جارٍ فتح ' + name + '...');
+        }
+
+        // توست
+        let toastTimer;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+            t.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+        }
+    </script>
 </body>
 </html>
