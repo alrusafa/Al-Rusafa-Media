@@ -22,6 +22,8 @@
             --whatsapp: #25D366;
             --alert: #ef4444;
             --alert-glow: rgba(239, 68, 68, 0.55);
+            --call-green: #16a34a;
+            --call-green-light: #22c55e;
             --marquee-h: 54px;
             --radius-lg: 26px;
             --radius-md: 20px;
@@ -49,7 +51,6 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             line-height: 1.6;
-            /* مساحة سفلية تكفي للشريط الثابت */
             padding-bottom: calc(var(--marquee-h) + 30px + env(safe-area-inset-bottom, 0px));
             -webkit-font-smoothing: antialiased;
         }
@@ -64,7 +65,7 @@
             align-items: center;
             justify-content: center;
             background: radial-gradient(circle at 50% 30%, #1d4e8a 0%, var(--dark) 55%, var(--darker) 100%);
-            padding: 24px;
+            padding: 24px 24px calc(24px + var(--marquee-h));
             animation: splashExit 0.7s var(--ease) 2.4s forwards;
         }
 
@@ -456,13 +457,129 @@
             background: #e3edf9;
         }
 
+        /* ============================================
+           ✅ زر الاتصال برقم الشكاوى 158
+           (أسفل تقديم الطلبات)
+           ============================================ */
+        .call-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 16px auto 0;
+            max-width: 100%;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, var(--call-green), var(--call-green-light));
+            color: #fff;
+            text-decoration: none;
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(34, 197, 94, 0.35);
+            transition: transform 0.18s var(--ease), box-shadow 0.25s var(--ease);
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .call-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .call-btn::before {
+            content: '';
+            position: absolute;
+            inset: -50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%);
+            animation: callGlow 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes callGlow {
+            0%, 100% { transform: translate(-30%, -30%) scale(0.8); opacity: 0.4; }
+            50%      { transform: translate(30%, 30%) scale(1.2); opacity: 0.8; }
+        }
+
+        .call-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            animation: phoneRing 2.2s ease-in-out infinite;
+        }
+
+        @keyframes phoneRing {
+            0%, 100% { transform: rotate(0); }
+            10%      { transform: rotate(-12deg); }
+            20%      { transform: rotate(12deg); }
+            30%      { transform: rotate(-8deg); }
+            40%      { transform: rotate(0); }
+        }
+
+        .call-text {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .call-title {
+            font-size: 11.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.88);
+            line-height: 1.35;
+        }
+
+        .call-number {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            direction: ltr;
+            text-align: right;
+            unicode-bidi: plaintext;
+        }
+
+        .call-arrow {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.25s var(--ease), background 0.25s;
+        }
+
+        .call-btn:active .call-arrow {
+            transform: scale(0.9);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .call-btn::before,
+            .call-icon { animation: none; }
+        }
+
         /* ========== الشريط السفلي المتحرك ========== */
         .marquee-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            z-index: 50;
+            z-index: 10000;
             background: linear-gradient(90deg, var(--dark), var(--primary), var(--dark));
             color: #fff;
             padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px));
@@ -470,6 +587,12 @@
             overflow: hidden;
             box-shadow: 0 -6px 22px rgba(15, 42, 74, 0.25);
             border-top: 2px solid var(--whatsapp);
+            animation: marqueeSlideUp 0.5s var(--ease) both;
+        }
+
+        @keyframes marqueeSlideUp {
+            from { transform: translateY(100%); }
+            to   { transform: translateY(0); }
         }
 
         .marquee-track {
@@ -540,6 +663,7 @@
             .marquee-track { animation: none; justify-content: center; width: 100%; }
             .marquee-item i.wa { animation: none; }
             .marquee-item i.alert-icon { animation: none; }
+            .marquee-bar { animation: none; }
         }
 
         /* توست */
@@ -558,7 +682,7 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.35s var(--ease);
-            z-index: 100;
+            z-index: 10001;
             white-space: nowrap;
             max-width: 90vw;
             text-align: center;
@@ -573,7 +697,6 @@
            استجابة الشاشات
            ============================================================ */
 
-        /* شاشات متوسطة (361px - 420px) — الهواتف الشائعة */
         @media (max-width: 420px) {
             .app-header { padding: 20px 16px 64px; }
             .header-title { margin-top: 12px; font-size: 18px; }
@@ -593,9 +716,13 @@
             .app-card h3 { font-size: 13.5px; }
             .app-card p { font-size: 11px; }
             .app-card .arrow { width: 28px; height: 28px; font-size: 11px; }
+            .call-btn { padding: 12px 14px; gap: 10px; border-radius: 16px; margin-top: 14px; }
+            .call-icon { width: 42px; height: 42px; font-size: 18px; border-radius: 12px; }
+            .call-number { font-size: 14px; }
+            .call-title { font-size: 10.5px; }
+            .call-arrow { width: 32px; height: 32px; font-size: 13px; border-radius: 10px; }
         }
 
-        /* شاشات صغيرة جداً (أقل من 360px) */
         @media (max-width: 360px) {
             .app-header { padding: 16px 14px 56px; }
             .header-title { margin-top: 10px; font-size: 16px; line-height: 1.3; }
@@ -616,6 +743,11 @@
             .app-card p { font-size: 10.5px; margin-top: 2px; }
             .app-card .badge { font-size: 8.5px; padding: 1px 6px; }
             .app-card .arrow { width: 26px; height: 26px; font-size: 10px; border-radius: 9px; }
+            .call-btn { padding: 11px 12px; gap: 8px; }
+            .call-icon { width: 38px; height: 38px; font-size: 16px; border-radius: 11px; }
+            .call-number { font-size: 13px; }
+            .call-title { font-size: 10px; }
+            .call-arrow { width: 28px; height: 28px; font-size: 12px; }
             .splash-logo { width: 100px; height: 100px; }
             .splash-title { font-size: 22px; }
             .splash-branch { font-size: 13px; }
@@ -625,7 +757,6 @@
             .marquee-item i.alert-icon { width: 22px; height: 22px; font-size: 11px; }
         }
 
-        /* شاشات قصيرة الارتفاع — تصغير الشريط لتوفير مساحة */
         @media (max-height: 700px) {
             :root { --marquee-h: 46px; }
             .marquee-bar { padding: 9px 0 calc(9px + env(safe-area-inset-bottom, 0px)); }
@@ -711,12 +842,25 @@
                 <div class="arrow"><i class="fas fa-arrow-left"></i></div>
             </a>
         </div>
+
+        <!-- ✅ زر الاتصال برقم الشكاوى 158 (أسفل تقديم الطلبات) -->
+        <a href="tel:158" class="call-btn" aria-label="اتصل برقم الشكاوى 158 لتقديم شكوى عن خلل في شبكة التوزيع">
+            <span class="call-icon">
+                <i class="fas fa-phone-volume"></i>
+            </span>
+            <span class="call-text">
+                <span class="call-title">للإبلاغ عن خلل في شبكة توزيع الطاقة</span>
+                <span class="call-number">اتصل الآن: 158</span>
+            </span>
+            <span class="call-arrow">
+                <i class="fas fa-phone"></i>
+            </span>
+        </a>
     </div>
 
-    <!-- الشريط السفلي المتحرك (مكرر مرتين لدوران سلس) -->
+    <!-- الشريط السفلي المتحرك -->
     <div class="marquee-bar" role="marquee" aria-label="إشعارات التواصل والمواعيد">
         <div class="marquee-track">
-            <!-- المجموعة الأولى -->
             <span class="marquee-item">
                 <i class="fab fa-whatsapp wa"></i>
                 سيتم التواصل معكم عبر تطبيق واتساب
@@ -734,10 +878,9 @@
             </span>
             <span class="marquee-item">
                 <i class="fas fa-triangle-exclamation alert-icon"></i>
-                موعد تقديم الطلب يوم الخميس من كل اسبوع
+                رقم شكاوى كهرباء الرصافة 158 للتبليغ عن اي خلل في الشبكة الكهربائية
                 <span class="dot"></span>
             </span>
-            <!-- المجموعة الثانية (نسخة مطابقة) — لضمان حركة سلسة دون انقطاع -->
             <span class="marquee-item">
                 <i class="fab fa-whatsapp wa"></i>
                 سيتم التواصل معكم عبر تطبيق واتساب
@@ -765,14 +908,12 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
-        // إخفاء شاشة البداية
         window.addEventListener('load', () => {
             setTimeout(() => {
                 document.querySelector('.splash').style.display = 'none';
             }, 3100);
         });
 
-        // تأثير اللمس الديناميكي
         document.querySelectorAll('.app-card').forEach(card => {
             card.addEventListener('pointerdown', e => {
                 const rect = card.getBoundingClientRect();
@@ -785,7 +926,6 @@
             });
         });
 
-        // معالجة فتح النموذج
         function handleForm(event, el, name) {
             const url = el.getAttribute('href') || '';
             if (!url || url.includes('yourCitizenFormLink') || url.includes('yourEmployeeFormLink')) {
@@ -796,7 +936,6 @@
             showToast('جارٍ فتح ' + name + '...');
         }
 
-        // توست
         let toastTimer;
         function showToast(msg) {
             const t = document.getElementById('toast');
