@@ -251,30 +251,30 @@
             max-width: 320px;
         }
 
-        /* بطاقة المدير العائمة */
+        /* ========== بطاقة المدير العائمة ========== */
         .manager-card {
             position: relative;
             margin: -68px auto 22px;
             max-width: 460px;
             background: var(--card);
             border-radius: var(--radius-lg);
-            padding: 22px;
+            padding: 18px;
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 14px;
             box-shadow: var(--shadow-md);
             border: 1px solid rgba(15, 42, 74, 0.05);
         }
 
-        /* ⬇️ التعديل الوحيد: تكبير صورة مدير الفرع ⬇️ */
+        /* ✅ صورة المدير — حجم متجاوب متناسق */
         .manager-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 28px;
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
             overflow: hidden;
             flex-shrink: 0;
-            border: 4px solid #fff;
-            box-shadow: 0 8px 22px rgba(15, 42, 74, 0.25);
+            border: 3px solid #fff;
+            box-shadow: 0 6px 16px rgba(15, 42, 74, 0.18);
             background: linear-gradient(145deg, var(--secondary), #3d9e8f);
         }
 
@@ -287,13 +287,13 @@
         .manager-info { min-width: 0; }
 
         .manager-info h4 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 800;
             color: var(--dark);
         }
 
         .manager-info p {
-            font-size: 13px;
+            font-size: 12.5px;
             color: var(--muted);
             margin-top: 2px;
         }
@@ -302,12 +302,12 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            margin-top: 8px;
-            font-size: 11.5px;
+            margin-top: 6px;
+            font-size: 11px;
             font-weight: 700;
             color: var(--success);
             background: rgba(34, 197, 94, 0.1);
-            padding: 4px 12px;
+            padding: 3px 10px;
             border-radius: 99px;
         }
 
@@ -460,7 +460,7 @@
             background: #e3edf9;
         }
 
-        /* ========== الشريط السفلي المتحرك (Marquee) ========== */
+        /* ========== الشريط السفلي المتحرك ========== */
         .marquee-bar {
             position: fixed;
             bottom: 0;
@@ -516,18 +516,9 @@
         }
 
         @keyframes alertPulse {
-            0% {
-                box-shadow: 0 0 0 0 var(--alert-glow);
-                transform: scale(1);
-            }
-            70% {
-                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
-                transform: scale(1.08);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-                transform: scale(1);
-            }
+            0% { box-shadow: 0 0 0 0 var(--alert-glow); transform: scale(1); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); transform: scale(1.08); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); transform: scale(1); }
         }
 
         .marquee-item .dot {
@@ -539,13 +530,13 @@
         }
 
         @keyframes marqueeLTR {
-            0%   { transform: translateX(-50%); }
+            0% { transform: translateX(-50%); }
             100% { transform: translateX(0%); }
         }
 
         @keyframes pulseIcon {
             0%, 100% { transform: scale(1); }
-            50%      { transform: scale(1.15); }
+            50% { transform: scale(1.15); }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -581,7 +572,7 @@
             transform: translate(-50%, 0);
         }
 
-        /* شاشات صغيرة جداً */
+        /* ========== شاشات صغيرة جداً ========== */
         @media (max-width: 360px) {
             .app-card { padding: 14px; gap: 12px; }
             .app-card .icon-box { width: 54px; height: 54px; font-size: 24px; border-radius: 17px; }
@@ -597,8 +588,24 @@
             .splash-company { font-size: 12px; }
             .splash-title { font-size: 22px; }
             .splash-branch { font-size: 13px; }
-            /* تصغير بسيط لصورة المدير على الشاشات الضيقة جداً */
-            .manager-avatar { width: 88px; height: 88px; border-radius: 25px; }
+            .manager-avatar { width: 62px; height: 62px; border-radius: 19px; }
+            .manager-info h4 { font-size: 15px; }
+            .manager-info p { font-size: 11.5px; }
+        }
+
+        /* ========== شاشات متوسطة (360px - 420px) ========== */
+        @media (min-width: 361px) and (max-width: 420px) {
+            .manager-avatar { width: 72px; height: 72px; border-radius: 22px; }
+            .manager-info h4 { font-size: 16px; }
+            .manager-info p { font-size: 12.5px; }
+        }
+
+        /* ========== شاشات كبيرة (421px فأكثر) ========== */
+        @media (min-width: 421px) {
+            .manager-avatar { width: 78px; height: 78px; border-radius: 24px; }
+            .manager-info h4 { font-size: 17px; }
+            .manager-info p { font-size: 13px; }
+            .status-dot { font-size: 11.5px; padding: 4px 11px; }
         }
     </style>
 </head>
@@ -607,7 +614,6 @@
     <!-- شاشة البداية -->
     <div class="splash">
         <div class="splash-logo">
-            <!-- ✅ المسار صحيح: img/logo.png -->
             <img src="img/logo.png" alt="شعار وزارة الكهرباء">
         </div>
         <div class="splash-company">الشركة العامة لتوزيع كهرباء بغداد</div>
@@ -621,7 +627,6 @@
         <header class="app-header">
             <div class="brand-row">
                 <div class="brand-icon">
-                    <!-- ✅ تم التصحيح: كان logo.png → أصبح img/logo.jpg -->
                     <img src="img/logo.png" alt="شعار وزارة الكهرباء">
                 </div>
                 <div class="brand-text">
@@ -710,7 +715,7 @@
             }, 3100);
         });
 
-        // تأثير اللمس الديناميكي (موضع التوهج)
+        // تأثير اللمس الديناميكي
         document.querySelectorAll('.app-card').forEach(card => {
             card.addEventListener('pointerdown', e => {
                 const rect = card.getBoundingClientRect();
