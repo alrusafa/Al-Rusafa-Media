@@ -383,9 +383,199 @@
 
         .call-btn:active .call-arrow { transform: scale(0.9); background: rgba(255, 255, 255, 0.35); }
 
-        @media (prefers-reduced-motion: reduce) {
-            .call-btn::before, .call-icon { animation: none; }
+        /* ============================================
+           ✅ النموذج المدمج
+           ============================================ */
+        .form-section {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200000;
+            background: var(--light);
+            overflow-y: auto;
+            padding: 0;
+            animation: formSlideIn 0.4s var(--ease);
         }
+
+        .form-section.active { display: block; }
+
+        @keyframes formSlideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to   { transform: translateX(0); opacity: 1; }
+        }
+
+        .form-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: linear-gradient(160deg, var(--dark) 0%, #1d4e8a 70%, var(--primary) 100%);
+            color: #fff;
+            padding: 16px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 14px rgba(15, 42, 74, 0.2);
+        }
+
+        .form-back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.18);
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.25s;
+            flex-shrink: 0;
+        }
+
+        .form-back-btn:active { background: rgba(255, 255, 255, 0.35); transform: scale(0.94); }
+
+        .form-topbar-title {
+            font-size: 16px;
+            font-weight: 800;
+            line-height: 1.35;
+        }
+
+        .form-topbar-title small {
+            display: block;
+            font-size: 11.5px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            margin-top: 2px;
+        }
+
+        .form-container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 22px 18px calc(var(--marquee-h) + 40px);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+            animation: fieldFadeIn 0.5s var(--ease) both;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.05s; }
+        .form-group:nth-child(2) { animation-delay: 0.1s; }
+        .form-group:nth-child(3) { animation-delay: 0.15s; }
+        .form-group:nth-child(4) { animation-delay: 0.2s; }
+        .form-group:nth-child(5) { animation-delay: 0.25s; }
+        .form-group:nth-child(6) { animation-delay: 0.3s; }
+
+        @keyframes fieldFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 7px;
+        }
+
+        .form-label i { color: var(--primary); font-size: 14px; }
+
+        .required-star { color: var(--alert); margin-right: 2px; }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--text);
+            background: #fff;
+            transition: border-color 0.25s, box-shadow 0.25s;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(44, 111, 187, 0.12);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232c6fbb' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            background-size: 18px;
+            padding-left: 38px;
+        }
+
+        .form-submit-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            background: linear-gradient(135deg, var(--call-green), var(--call-green-light));
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 800;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 8px 22px rgba(34, 197, 94, 0.35);
+            transition: transform 0.18s var(--ease), box-shadow 0.25s var(--ease);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .form-submit-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .form-submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-submit-btn .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 255, 255, 0.35);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+
+        .form-submit-btn.loading .spinner { display: inline-block; }
+        .form-submit-btn.loading .btn-text { display: none; }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ============================================
            ✅ الشريط السفلي المتحرك
@@ -424,7 +614,6 @@
             flex-shrink: 0;
         }
 
-        /* ✅ الحركة تبدأ فقط بعد إضافة .running */
         .marquee-bar.running .marquee-track {
             animation: marqueeRTL 30s linear infinite;
         }
@@ -454,7 +643,6 @@
 
         .marquee-item .dot { width: 5px; height: 5px; border-radius: 50%; background: #ffd166; display: inline-block; }
 
-        /* ✅✅✅ التعديل الجوهري: الحركة تبدأ من 0 وتتحرك نحو 50% */
         @keyframes marqueeRTL {
             0%   { transform: translateX(0); }
             100% { transform: translateX(50%); }
@@ -469,9 +657,9 @@
             .marquee-bar.running .marquee-track { animation: none; justify-content: center; width: 100%; }
             .marquee-item i.wa { animation: none; }
             .marquee-item i.alert-icon { animation: none; }
+            .call-btn::before, .call-icon, .manager-avatar { animation: none; }
         }
 
-        /* توست */
         .toast {
             position: fixed;
             bottom: calc(var(--marquee-h) + 20px + env(safe-area-inset-bottom, 0px));
@@ -487,15 +675,16 @@
             opacity: 0;
             pointer-events: none;
             transition: all 0.35s var(--ease);
-            z-index: 100001;
+            z-index: 300000;
             white-space: nowrap;
             max-width: 90vw;
             text-align: center;
         }
 
         .toast.show { opacity: 1; transform: translate(-50%, 0); }
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--alert); }
 
-        /* استجابة الشاشات */
         @media (max-width: 420px) {
             .app-header { padding: 20px 16px 64px; }
             .header-title { margin-top: 12px; font-size: 18px; }
@@ -617,25 +806,23 @@
         <div class="section-label"><i class="fas fa-layer-group"></i> نوع الطلب</div>
 
         <div class="app-list">
-            <a class="app-card citizen" href="https://forms.gle/yourCitizenFormLink" target="_blank" rel="noopener noreferrer"
-               onclick="handleForm(event, this, 'نموذج المواطنين')">
+            <div class="app-card citizen" onclick="openForm('مواطن')" role="button" tabindex="0">
                 <div class="icon-box"><i class="fas fa-users"></i></div>
                 <div class="content">
                     <h3>تقديم طلب مقابلة للمواطنين <span class="badge">مواطن</span></h3>
                     <p>شكاوى، اقتراحات، واستفسارات حول الخدمات</p>
                 </div>
                 <div class="arrow"><i class="fas fa-arrow-left"></i></div>
-            </a>
+            </div>
 
-            <a class="app-card employee" href="https://forms.gle/yourEmployeeFormLink" target="_blank" rel="noopener noreferrer"
-               onclick="handleForm(event, this, 'نموذج الموظفين')">
+            <div class="app-card employee" onclick="openForm('موظف')" role="button" tabindex="0">
                 <div class="icon-box"><i class="fas fa-user-tie"></i></div>
                 <div class="content">
                     <h3>تقديم طلب مقابلة للموظفين <span class="badge">موظف</span></h3>
                     <p>أمور وظيفية، اقتراحات تطويرية، ودعم الأداء</p>
                 </div>
                 <div class="arrow"><i class="fas fa-arrow-left"></i></div>
-            </a>
+            </div>
         </div>
 
         <a href="tel:158" class="call-btn" aria-label="اتصل برقم الشكاوى 158 لتقديم شكوى عن خلل في شبكة التوزيع">
@@ -643,7 +830,7 @@
                 <i class="fas fa-phone-volume"></i>
             </span>
             <span class="call-text">
-                <span class="call-title">للإبلاغ عن خلل في شبكة توزيع الطاقة</span>
+                <span class="call-title">رقم شكاوى كهرباء الرصافة (الخط الساخن)</span>
                 <span class="call-number">اتصل الآن: 158</span>
             </span>
             <span class="call-arrow">
@@ -652,10 +839,75 @@
         </a>
     </div>
 
-    <!-- ✅ الشريط السفلي -->
+    <!-- النموذج المدمج -->
+    <div class="form-section" id="formSection">
+        <div class="form-topbar">
+            <button class="form-back-btn" onclick="closeForm()" aria-label="رجوع">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+            <div class="form-topbar-title">
+                <span id="formTypeTitle">تقديم طلب جديد</span>
+                <small>كهرباء الرصافة — فرع توزيع كهرباء بغداد</small>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <form id="requestForm" onsubmit="submitForm(event)">
+                <input type="hidden" id="requestType" name="type" value="">
+
+                <div class="form-group">
+                    <label class="form-label" for="name">
+                        <i class="fas fa-user"></i> الاسم الكامل <span class="required-star">*</span>
+                    </label>
+                    <input type="text" id="name" name="name" class="form-input" placeholder="اكتب اسمك الثلاثي" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="phone">
+                        <i class="fas fa-phone"></i> رقم الهاتف <span class="required-star">*</span>
+                    </label>
+                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="مثال: 07701234567" required pattern="[0-9]{10,11}">
+                </div>
+
+                <div class="form-group" id="sectorGroup" style="display: none;">
+                    <label class="form-label" for="sector">
+                        <i class="fas fa-building"></i>جهة العمل  
+                    </label>
+                    <input type="text" id="sector" name="sector" class="form-input" placeholder=" مثال: القسم — القطاع— شعبة ">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="subject">
+                        <i class="fas fa-tag"></i> موضوع الطلب <span class="required-star">*</span>
+                    </label>
+                    <select id="subject" name="subject" class="form-select" required>
+                        <option value="">-- اختر الموضوع --</option>
+                        <option value="شكوى">شكوى</option>
+                        <option value="اقتراح">اقتراح</option>
+                        <option value="استفسار">استفسار</option>
+                        <option value="طلب مقابلة">طلب مقابلة</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="message">
+                        <i class="fas fa-pen"></i> تفاصيل الطلب <span class="required-star">*</span>
+                    </label>
+                    <textarea id="message" name="message" class="form-textarea" placeholder="اشرح طلبك بالتفصيل..." required></textarea>
+                </div>
+
+                <button type="submit" class="form-submit-btn" id="submitBtn">
+                    <span class="spinner"></span>
+                    <span class="btn-text"><i class="fas fa-paper-plane"></i> إرسال الطلب</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- الشريط السفلي -->
     <div class="marquee-bar" id="marqueeBar" role="marquee" aria-label="إشعارات التواصل والمواعيد">
         <div class="marquee-track">
-            <!-- المجموعة الأولى -->
             <span class="marquee-item">
                 <i class="fab fa-whatsapp wa"></i>
                 سيتم التواصل معكم عبر تطبيق واتساب
@@ -676,7 +928,6 @@
                 رقم شكاوى كهرباء الرصافة 158 للتبليغ عن اي خلل في الشبكة الكهربائية
                 <span class="dot"></span>
             </span>
-            <!-- المجموعة الثانية (نسخة مطابقة) -->
             <span class="marquee-item" aria-hidden="true">
                 <i class="fab fa-whatsapp wa"></i>
                 سيتم التواصل معكم عبر تطبيق واتساب
@@ -704,8 +955,10 @@
 
     <script>
         // ============================================
-        // ✅ إخفاء الشاشة ثم تشغيل الحركة فوراً من الصفر
+        // ✅ رابط Apps Script (في سطر واحد)
         // ============================================
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6K-cAhKUp8vvop5VQEBAOULXEQSC76oRw2R3O1npiMrMERVh1f0xI_V8IFeVxz5oD/exec';
+
         window.addEventListener('load', () => {
             const splash = document.querySelector('.splash');
             const marqueeBar = document.getElementById('marqueeBar');
@@ -716,7 +969,6 @@
 
                 setTimeout(() => {
                     splash.style.display = 'none';
-                    // ✅ تشغيل الحركة بعد اختفاء الشاشة تماماً
                     marqueeBar.classList.add('running');
                 }, 700);
             }, 3100);
@@ -732,25 +984,102 @@
             card.addEventListener('click', () => {
                 if (navigator.vibrate) navigator.vibrate(10);
             });
+
+            card.addEventListener('keypress', e => {
+                if (e.key === 'Enter' || e.key === ' ') card.click();
+            });
         });
 
-        function handleForm(event, el, name) {
-            const url = el.getAttribute('href') || '';
-            if (!url || url.includes('yourCitizenFormLink') || url.includes('yourEmployeeFormLink')) {
-                event.preventDefault();
-                showToast('⚠️ استبدل رابط النموذج بالرابط الفعلي');
+        function openForm(type) {
+            const formSection = document.getElementById('formSection');
+            const typeTitle = document.getElementById('formTypeTitle');
+            const requestType = document.getElementById('requestType');
+            const sectorGroup = document.getElementById('sectorGroup');
+
+            typeTitle.textContent = 'طلب مقابلة — ' + type;
+            requestType.value = type;
+
+            if (type === 'موظف') {
+                sectorGroup.style.display = 'block';
+            } else {
+                sectorGroup.style.display = 'none';
+                document.getElementById('sector').value = '';
+            }
+
+            formSection.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('marqueeBar').style.display = 'none';
+
+            setTimeout(() => document.getElementById('name').focus(), 400);
+        }
+
+        function closeForm() {
+            document.getElementById('formSection').classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('marqueeBar').style.display = '';
+        }
+
+        async function submitForm(event) {
+            event.preventDefault();
+
+            const btn = document.getElementById('submitBtn');
+            const form = document.getElementById('requestForm');
+
+            const data = {
+                type: document.getElementById('requestType').value,
+                name: document.getElementById('name').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                sector: document.getElementById('sector').value.trim(),
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value.trim()
+            };
+
+            if (!data.name || !data.phone || !data.subject || !data.message) {
+                showToast('⚠️ يرجى ملء جميع الحقول المطلوبة', 'error');
                 return;
             }
-            showToast('جارٍ فتح ' + name + '...');
+
+            if (!/^[0-9]{10,11}$/.test(data.phone)) {
+                showToast('⚠️ رقم الهاتف يجب أن يكون 10-11 رقماً', 'error');
+                return;
+            }
+
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            try {
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(data)
+                });
+
+                showToast('✅ تم إرسال طلبك بنجاح', 'success');
+
+                form.reset();
+                document.getElementById('requestType').value = data.type;
+
+                setTimeout(() => closeForm(), 1800);
+
+            } catch (err) {
+                console.error(err);
+                showToast('❌ حدث خطأ، يرجى المحاولة مرة أخرى', 'error');
+            } finally {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
         }
 
         let toastTimer;
-        function showToast(msg) {
+        function showToast(msg, type = '') {
             const t = document.getElementById('toast');
             t.textContent = msg;
-            t.classList.add('show');
+            t.className = 'toast show ' + type;
             clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+            toastTimer = setTimeout(() => {
+                t.classList.remove('show');
+            }, 3000);
         }
     </script>
 </body>
